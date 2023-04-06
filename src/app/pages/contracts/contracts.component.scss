@@ -1,0 +1,15 @@
+.fx-list {
+  > .list-group-item {
+    border-bottom: 0;
+    font-size: 14px;
+    &.pl-0 {
+      padding-left: 0;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    &.fx-active {
+      color: var(--primary-hex);
+    }
+  }
+}

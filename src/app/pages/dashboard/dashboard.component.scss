@@ -1,0 +1,86 @@
+@import "../../theme/sass/conf/conf.scss";
+
+.fxc-gradient {
+  background-image: linear-gradient(#dafbe1, #ffffff);
+}
+
+.fxd-menu {
+  &.v-1 {
+    background-color: #cabcff;
+    border-color: #4922d9;
+    color: #4922d9;
+    .txt {
+      color: #4922d9;
+    }
+  }
+  &.v-2 {
+    background-color: #fbc899;
+    border-color: #894608;
+    color: #894608;
+    .txt {
+      color: #894608;
+    }
+  }
+  &.v-3 {
+    background-color: #ffa9a0;
+    border-color: #d51400;
+    color: #d51400;
+    .txt {
+      color: #d51400;
+    }
+  }
+  &.v-4 {
+    background-color: #96ffe0;
+    border-color: #029c6f;
+    color: #029c6f;
+    .txt {
+      color: #029c6f;
+    }
+  }
+  &.v-5 {
+    background-color: #fff0a0;
+    border-color: #97810a;
+    color: #97810a;
+    .txt {
+      color: #97810a;
+    }
+  }
+  /* &:hover {
+    cursor: pointer;
+  } */
+}
+
+.to-read {
+  background-color: #ecfffa;
+  border-left: 4px solid #4cd7b5;
+  border-color: #4cd7b5;
+  .fa {
+    color: #4cd7b5;
+  }
+}
+
+.fr-aside {
+  max-height: calc(100vh - calc(70px + 1.5rem));
+  overflow-y: scroll;
+  @include scrollNone();
+}
+
+.accordion-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--bs-border-color-translucent);
+  > .accordion-header {
+    > .accordion-button {
+      background-color: transparent;
+      box-shadow: none;
+      color: var(--dark-text);
+      font-weight: 600;
+    }
+  }
+  > .accordion-collapse {
+    border-radius: 8px;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Map User</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6 col-xl-4 offset-md-3 offset-xl-4">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="Seeker name" formControlName="seekerInfo"
+              [ngClass]="{'is-invalid': f?.seekerInfo?.touched && !f?.seekerInfo?.valid}">
+            <label>Seeker Name*</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <select class="form-select" formControlName="roleId"
+              [ngClass]="{'is-invalid': f?.roleId?.touched && !f?.roleId?.valid}">
+              <option [value]="null" hidden>Select Role</option>
+              <option *ngFor="let n of subroles" [value]="n?.id">{{n?.subRoleDescription}}</option>
+            </select>
+            <label>Role Name*</label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center w-100">
+      <button class="btn btn-primary" [disabled]="!form?.valid" (click)="saveInfo()">Save</button>
+    </div>
+  </div>
+</div>

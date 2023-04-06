@@ -1,0 +1,41 @@
+@import "../authentication.component.scss";
+
+.sudo,
+.sudo1 {
+  width: 100%;
+  height: 120px;
+  margin: 10px 0 !important;
+  background-repeat: no-repeat;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  cursor: pointer;
+  &:hover {
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+  .min-vh-100 {
+    min-height: 100vh !important;
+  }
+}
+
+.sudo {
+  background-image: url('/assets/images/skill-seeker-img-grey.svg');
+  &:hover {
+    background-image: url('/assets/images/skill-seeker-img-blue.svg');
+  }
+}
+
+.sudo1 {
+  background-image: url('https://flexcub.com/images/skill-partner-grey.svg');
+  &:hover {
+    background-image: url('https://flexcub.com/images/skill-partner-blue.svg');
+  }
+}
+
+@media (min-width: 992px) {
+  .txt-lg-left {
+    text-align: left !important;
+  }
+}

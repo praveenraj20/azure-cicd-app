@@ -1,0 +1,25 @@
+.fx-spread {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.25rem;
+  display: block;
+  position: relative;
+  &::before,
+  &::after {
+    border-top: 1px solid var(--border-color);
+    content: "";
+    height: 1px;
+    width: 35%;
+    display: table-cell;
+  }
+  > span {
+    display: table-cell;
+    width: 30%;
+    white-space: nowrap;
+    padding: 0 24px;
+    > span {
+      margin-top: -10px;
+      display: block;
+    }
+  }
+}

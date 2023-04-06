@@ -1,0 +1,105 @@
+<div class="modal modal-backdrop rightx nxt-3 d-block" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close close dark fs-16 txt" (click)="_close()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngFor="let a of projects">
+          <div class="col-md-12 col-lg-12 d-flex align-items-center">
+            <div>
+              <img class="avatar" [src]="ownerImage" />
+            </div>
+            <div class="d-flex">
+              <h5 class="txt fs-18 bold primary-dark mb-0 px-3">{{ a?.firstName }}</h5>
+              <p class="px-4 badge success">Submitted</p>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 d-flex project-week">
+            <label>Project:</label>
+            <p class="px-3 pt-0">{{a?.title}}</p>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 d-flex project-week">
+            <label>Week:</label>
+            <p class="px-3 pt-0">{{a?.startDate | date : 'MM/dd/yyyy'}}</p>
+          </div>
+        </div>
+
+        <div class="row mt-5 mx-3">
+          <div class="col-lg-12 col-md-12 col-sm-12 d-flex">
+            <label class="pt-1" style="margin-left:-20px">Total hours:</label>
+            <p class="px-5 txt fs-24 bold primary-dark">{{getTotal(_total)}}</p>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 d-flex mt-5 mb-5">
+            <h5 class="txt bold dark fs-16 mb-0" style="margin-left:-20px">Timesheet details:</h5>
+          </div>
+        </div>
+
+
+
+        <table class="table table-borderless mb-3">
+          <thead>
+            <tr>
+              <td></td>
+              <td *ngFor="let n of weekOptions">
+                <div class="d-block text-center">
+                  <p class="mb-1 txt text-uppercase bold primary fs-14">{{ n?.day }}</p>
+                  <p class="mb-0 txt text-uppercase dark sm">{{ n?.date | date : 'dd' }}</p>
+                </div>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let n of projects">
+              <tr class="idle primary">
+                <td colspan="9">
+                  <p class="txt fs-16 bold dark mb-0"> {{n?.title}}</p>
+                </td>
+              </tr>
+              <tr *ngFor="let k of n?.tasks">
+                <td>
+                  <p class="txt fs-14 mb-0">{{k?.title}}</p>
+                  <p class="txt sm mb-0 text-truncate" style="max-width: 500px;">{{k?.description}}</p>
+                </td>
+
+                <td *ngFor="let j of k?.duration; let ki = index">
+                  <input disabled type="text" class="form-control mxw-7x" [value]="j?.duration" />
+                </td>
+              </tr>
+            </ng-container>
+            <tr class="idle grey">
+              <td>
+                <p class="txt bold dark mb-0 fs-16">Total hours</p>
+              </td>
+              <td *ngFor="let n of total; let i = index">
+                <ng-container>
+                  <div class="text-center">
+                    <p class="txt bold mb-0 fs-16">{{_total[i]}}</p>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="d-flex mt-1"> -->
+          <p class="attach" *ngIf="this.fileAttachments.length!==0">Attachments:</p>
+          <p class="txt-fs-12 bold" *ngIf="this.fileAttachments.length==0">No attachments for this timesheet</p>
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-6 col-xl-4">
+              <div class="card fx-files" *ngFor="let n of fileAttachments; let i=index">
+                <div class="card-body p-3">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="txt dark mb-0 text-truncate">{{n?.name}}</p>
+                    <div class="d-flex">
+                      <a class="btn btn-icon btn-outline-primary me-1" *ngIf="n?.webkitRelativePath" [href]="n?.webkitRelativePath">
+                        <i class="fal fa-download"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>

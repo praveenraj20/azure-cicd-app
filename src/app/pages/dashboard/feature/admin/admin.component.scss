@@ -1,0 +1,18 @@
+.fx-card {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fx-action {
+  > a {
+    margin-right: 1.5rem;
+    font-weight: 600;
+    i {
+      font-size: 18px;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

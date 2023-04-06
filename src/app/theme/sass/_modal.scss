@@ -1,0 +1,69 @@
+$border-radius: 8px;
+$default-padding: 1.25rem;
+.modal-backdrop {
+  background-color: rgba($color: #000000, $alpha: 0.27);
+  z-index: 1020;
+}
+
+.modal-content {
+  border-radius: $border-radius;
+}
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: $default-padding $default-padding;
+}
+
+.modal-header {
+  .close {
+    padding: 1rem 1rem;
+    // auto on the left force icon to the right even when there is no .modal-title
+    margin: -1rem -1rem -1rem auto;
+
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+  }
+}
+
+.rightx {
+  > .modal-dialog {
+    position: fixed;
+    margin: auto;
+    min-width: 300px;
+    max-width: 300px;
+    height: 100%;
+    right: 0;
+    > .modal-content {
+      height: 100%;
+      overflow-y: auto;
+      border: 0;
+      border-radius: 0;
+      > .modal-body {
+        padding: 1rem;
+      }
+    }
+  }
+  &.nxt-1 {
+    > .modal-dialog {
+      min-width: 375px;
+      max-width: 375px;
+    }
+  }
+  &.nxt-2 {
+    > .modal-dialog {
+      min-width: 400px;
+      max-width: 400px;
+    }
+  }
+  &.nxt-3 {
+    > .modal-dialog {
+      min-width: 425px;
+      max-width: 425px;
+    }
+  }
+}

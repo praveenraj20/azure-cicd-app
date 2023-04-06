@@ -1,0 +1,38 @@
+<div class="avatar-flex mb-4">
+  <a class="avatar md">
+    <img [src]="selection?.avatar">
+  </a>
+  <div class="fxg">
+    <h5 class="txt mb-1 bold fs-16 primary-dark">{{selection?.skillOwnerName}}</h5>
+    <p class="txt sm mb-0">Experience: {{selection?.experience}}</p>
+  </div>
+</div>
+
+<div class="fx-progress-v" *ngFor="let n of selection?.requirementPhaseList; let i = index; let last = last"
+  [ngClass]="$any(n)?.stage < $any(selection)?.currentStage ? 'success' : n?.stage === selection?.currentStage ? 'review' : ''">
+  <div class="fxg">
+    <p class="txt sm mb-1">{{n?.requirementPhaseName}}</p>
+    <div class="d-block" *ngIf="i + 1 <= $any(selection)?.currentStage && !last">
+      <p class="txt sm dark bold mb-2">
+        <span class="me-1"><i class="fal fa-calendar me-2"></i> Date of interview:</span>
+        <span *ngIf="viewSelection && n?.dateOfInterview">
+          {{ n?.dateOfInterview + ',' + n?.timeOfInterview | date : 'short' }}-
+          {{ n?.dateOfInterview + ',' + n?.endTimeOfInterview | date : 'shortTime' }}
+        </span>
+      </p>
+      <p class="txt sm dark bold mb-2">
+        <span class="me-1"><i class="fal fa-user me-2"></i> Interviewed by:</span>
+        <span *ngIf="viewSelection && n?.interviewedBy !== 'Skill Seeker'">
+          {{ n?.interviewedBy }}
+        </span>
+        <span *ngIf="viewSelection && n?.interviewedBy === 'Skill Seeker'">
+          {{user?.firstName}} {{user?.lastName}}
+        </span>
+      </p>
+      <p class="txt sm dark bold mb-2">
+        <span class="me-1"><i class="fal fa-comment-alt me-2"></i> Feedback: </span>
+        <span *ngIf="n?.feedback">{{ n?.feedback }}</span>
+      </p>
+    </div>
+  </div>
+</div>

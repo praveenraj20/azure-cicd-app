@@ -1,0 +1,60 @@
+.fx-list {
+  > .list-group-item {
+    border: 0;
+    color: var(--dark-text);
+    padding: 0.5rem 0;
+    font-weight: 600;
+    &.fx-active {
+      color: var(--primary-hex);
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+@media (min-width: 767.98px) {
+  .fx-item-border {
+    border-left: 1px solid var(--border-color);
+  }
+}
+
+.fx-pic-thumbnail {
+  max-width: 130px;
+  max-height: 130px;
+  cursor: pointer;
+}
+
+.fx-badge {
+  &.primary {
+    background-color: var(--primary-hex);
+    color: var(--primary-contrast-hex);
+  }
+  &.danger {
+    background-color: var(--bs-red);
+    color: var(--white-text);
+  }
+  &.success {
+    background-color: var(--bs-green);
+    color: var(--white-text);
+  }
+  font-weight: 600;
+  border-radius: 24px;
+}
+
+.txt {
+  &.right {
+    text-align: right;
+  }
+  &.i {
+    font-style: italic;
+  }
+}
+
+.fx-docs {
+  max-width: 325px;
+}
+
+.fx-check {
+  margin-left: calc(var(--bs-gutter-x) * 0.5);
+}

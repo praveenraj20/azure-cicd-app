@@ -1,0 +1,292 @@
+<div class="card">
+    <div class="card-header">
+      <h5 class="card-title d-flex align-items-center">
+        <span *ngIf="visible === 'edit' || visible ==='preview'">
+          <button class="btn btn-icon me-2" routerLink="/partners-admin">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
+        </span>
+        <!-- <span *ngIf="visible === 'new'">Add New Partner</span> -->
+        <span *ngIf="visible === 'edit'">Edit Partner</span>
+        <span *ngIf="visible === 'preview'">View Partner</span>
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 col-md-4 col-xl-3" *ngIf="visible !== 'preview'">
+          <ul class="list-group list-group-flush fx-list mb-4">
+            <li class="list-group-item" [class.fx-active]="i === _tabSelection" *ngFor="let n of tabs; let i = index"
+              (click)="tabSelection(i)">{{n}}</li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-8 col-xl-9"> <!-- [ngClass]="visible !== 'preview' ? 'col-md-8 col-xl-9' : ''" -->
+          <ng-container *ngIf="_tabSelection === 0" [ngTemplateOutlet]="basicTemplate"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #basicTemplate>
+    <h3 class="txt dark bold">Basic Details</h3>
+
+    <div class="row mb-4" [formGroup]="formOne">
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Skill Seeker / Client Business Name"
+            formControlName="businessName"
+            [ngClass]="{ 'is-invalid': f1?.businessName?.touched && f1?.businessName?.errors }" />
+          <label>Skill Partner / Client Business Name*</label>
+          <div *ngIf="f1?.businessName?.touched && f1?.businessName?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.businessName?.errors?.required">Skill Seeker / Client Business Name is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Skill Seeker / Client Business Name"
+            formControlName="serviceFeepercentage"
+            [ngClass]="{ 'is-invalid': f1?.serviceFeepercentage?.touched && f1?.serviceFeepercentage?.errors }" />
+          <label>Service Fee Percentage*</label>
+          <div *ngIf="f1?.serviceFeepercentage?.touched && f1?.serviceFeepercentage?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.serviceFeepercentage?.errors?.required">Service Fee percentage is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-envelope"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Business Email Address" formControlName="businessEmail"
+            [ngClass]="{ 'is-invalid': f1?.businessEmail?.touched && f1?.businessEmail?.errors }" />
+          <label>Business Email Address*</label>
+
+          <div *ngIf="f1?.businessEmail?.touched && f1?.businessEmail?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.businessEmail?.errors?.required">Business Email Address is required</div>
+            <div *ngIf="f1?.businessEmail?.errors?.pattern">Please provide a valid email address</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-phone-alt"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Business Phone Number" formControlName="businessPhone"
+            (keypress)="onlyNumber($event)"
+            [ngClass]="{ 'is-invalid': f1?.businessPhone?.touched && f1?.businessPhone?.errors }" />
+          <label>Business Phone Number*</label>
+
+          <div *ngIf="f1?.businessPhone?.touched && f1?.businessPhone?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.businessPhone?.errors?.required">Business Phone Number is required</div>
+            <div *ngIf="f1?.businessPhone?.errors?.pattern">Please provide a valid phone number</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+            [ngClass]="{ 'is-invalid': f1?.firstName?.touched && f1?.firstName?.errors }" />
+          <label>First Name*</label>
+
+          <div *ngIf="f1?.firstName?.touched && f1?.firstName?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.firstName?.errors?.required">First Name is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+            [ngClass]="{ 'is-invalid': f1?.lastName?.touched && f1?.lastName?.errors }" />
+          <label>Last Name*</label>
+
+          <div *ngIf="f1?.lastName?.touched && f1?.lastName?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.lastName?.errors?.required">Last Name is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Employer Identification Number (EIN)" formControlName="licenseNumber"
+            [ngClass]="{ 'is-invalid': f1?.licenseNumber?.touched && f1?.licenseNumber?.errors }" />
+            <label>Employer Identification Number (EIN)</label>
+
+            <div *ngIf="f1?.licenseNumber?.touched && f1?.licenseNumber?.errors" class="invalid-feedback">
+              <div *ngIf="!f1?.licenseNumber?.errors?.pattern">Employer Identification Number is required</div>
+              <div *ngIf="f1?.licenseNumber?.errors?.pattern">Please enter the valid EIN. (XX-XXXXXXX)</div>
+            </div>
+        
+          </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Address Line 1" formControlName="address"
+            [ngClass]="{ 'is-invalid': f1?.address?.touched && f1?.address?.errors }" />
+          <label>Address Line 1*</label>
+
+          <div *ngIf="f1?.address?.touched && f1?.address?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.address?.errors?.required">Address Line 1 is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Address Line 2" formControlName="_address"
+            [ngClass]="{ 'is-invalid': f1?._address?.touched && f1?._address?.errors }" />
+          <label>Address Line 2</label>
+
+          <div *ngIf="f1?._address?.touched && f1?._address?.errors" class="invalid-feedback">
+            <div *ngIf="f1?._address?.errors?.required">Address Line 2 is required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 col-lg-4">
+        <div class="form-floating mb-4">
+          <select class="form-select" formControlName="state" (change)="getCities()"
+            [ngClass]="{'is-invalid': f1?.state?.touched && !f1?.state?.valid}">
+            <option [value]="null" hidden>Select State</option>
+            <option *ngFor="let n of _states" [value]="n?.state_name">{{n?.state_name}}</option>
+          </select>
+
+          <label>State*</label>
+
+          <div *ngIf="f1?.state?.touched && f1?.state?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.state?.errors?.required">State is required</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-12 col-md-4 col-lg-4">
+        <div class="form-floating mb-4">
+          <select class="form-select" formControlName="city"
+            [ngClass]="{'is-invalid': f1?.city?.touched && !f1?.city?.valid}">
+            <option [value]="null" hidden>Select City</option>
+            <option *ngFor="let n of _cities" [value]="n?.city_name">{{n?.city_name}}</option>
+          </select>
+
+          <label>City*</label>
+
+          <div *ngIf="f1?.city?.touched && f1?.city?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.city?.errors?.required">City is required</div>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="col-12 col-md-4 col-lg-4">
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" placeholder="Zipcode" formControlName="zipCode" maxlength="5"
+            (keypress)="onlyNumber($event)" [ngClass]="{ 'is-invalid': f1?.zipCode?.touched && f1?.zipCode?.errors }" />
+          <label>Zipcode*</label>
+
+          <div *ngIf="f1?.zipCode?.touched && f1?.zipCode?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.zipCode?.errors?.required">Zipcode is required</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-phone-alt"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Phone Number" formControlName="phoneNumber"
+            (keypress)="onlyNumber($event)"
+            [ngClass]="{ 'is-invalid': f1?.phoneNumber?.touched && f1?.phoneNumber?.errors }" />
+          <label>Phone Number*</label>
+
+          <div *ngIf="f1?.phoneNumber?.touched && f1?.phoneNumber?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.phoneNumber?.errors?.required">Phone Number is required</div>
+            <div *ngIf="f1?.phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-envelope"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Email Address" formControlName="email"
+            [ngClass]="{ 'is-invalid': f1?.email?.touched && f1?.email?.errors }" />
+          <label>Email Address*</label>
+
+          <div *ngIf="f1?.email?.touched && f1?.email?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.email?.errors?.required">Email Address is required</div>
+            <div *ngIf="f1?.email?.errors?.pattern">Please enter the valid email</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-phone-alt"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Alternative Phone Number" formControlName="_phoneNumber"
+            (keypress)="onlyNumber($event)"
+            [ngClass]="{ 'is-invalid': f1?._phoneNumber?.touched && f1?._phoneNumber?.errors }" />
+          <label>Alternative Phone Number</label>
+
+          <div *ngIf="f1?._phoneNumber?.touched && f1?._phoneNumber?.errors" class="invalid-feedback">
+            <div *ngIf="f1?._phoneNumber?.errors?.required">Alternative Phone Number is required</div>
+            <div *ngIf="f1?._phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4 fl-input-group">
+          <button class="btn ico ne">
+            <i class="fal fa-envelope"></i>
+          </button>
+
+          <input type="text" class="form-control" placeholder="Alternate Email Address" formControlName="_email"
+            [ngClass]="{ 'is-invalid': f1?._email?.touched && f1?._email?.errors }" />
+          <label>Alternative Email Address</label>
+
+          <div *ngIf="f1?._email?.touched && f1?._email?.errors" class="invalid-feedback">
+            <div *ngIf="f1?._email?.errors?.required">Alternative Email Address is required</div>
+            <div *ngIf="f1?._email?.errors?.pattern">Please enter the valid email</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="col-12 col-lg-6">
+        <div class="form-floating mb-4">
+          <select class="form-select" formControlName="status"
+            [ngClass]="{'is-invalid': f1?.status?.touched && !f1?.status?.valid}">
+            <option [value]="null" hidden>Select Status</option>
+            <option *ngFor="let n of status" [value]="n">{{n}}</option>
+          </select>
+          <label>Status*</label>
+
+          <div *ngIf="f1?.status?.touched && f1?.status?.errors" class="invalid-feedback">
+            <div *ngIf="f1?.status?.errors?.required">Status is required</div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="fx-border my-3" *ngIf="visible !== 'preview'"></div>
+    <div class="text-center" *ngIf="visible !== 'preview'">
+      <button class="btn text-danger" (click)="navigate('/seekers')">Cancel</button>
+      <button class="btn btn-primary" [disabled]="!formOne?.valid" (click)="saveBasicInfo()">Save Changes</button>
+    </div>
+  </ng-template>
+
+
+

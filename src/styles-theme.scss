@@ -1,0 +1,63 @@
+@import "~@angular/material/theming";
+// @include mat-core();
+
+$mat-primary: mat-palette(
+  (
+    100: rgba(var(--primary), 0.1),
+    500: rgba(var(--primary), 1),
+    700: rgba(var(--primary), 1),
+    contrast: (
+      100: rgba(var(--primary-contrast), 1),
+      500: rgba(var(--primary-contrast), 1),
+      700: rgba(var(--primary-contrast), 1),
+    ),
+  )
+) !default;
+
+$mat-accent: mat-palette(
+  (
+    100: rgba(var(--accent), 0.1),
+    500: rgba(var(--accent), 1),
+    700: rgba(var(--accent), 1),
+    contrast: (
+      100: rgba(var(--accent-contrast), 1),
+      500: rgba(var(--accent-contrast), 1),
+      700: rgba(var(--accent-contrast), 1),
+    ),
+  )
+) !default;
+
+$mat-warn: mat-palette(
+  (
+    100: rgba(var(--warn), 0.1),
+    500: rgba(var(--warn), 1),
+    700: rgba(var(--warn), 1),
+    contrast: (
+      100: rgba(var(--warn-contrast), 1),
+      500: rgba(var(--warn-contrast), 1),
+      700: rgba(var(--warn-contrast), 1),
+    ),
+  )
+) !default;
+
+$mat-theme: mat-light-theme(
+  (
+    color: (
+      primary: $mat-primary,
+      accent: $mat-accent,
+      warn: $mat-warn,
+    ),
+  )
+);
+@include angular-material-theme($mat-theme);
+
+$mat-typography: mat-typography-config(
+  $font-family: "Inter, Roboto, monospace",
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 500),
+);
+
+@include mat-core($mat-typography);
+@include angular-material-typography($mat-typography);
+@include mat-base-typography($mat-typography);
+@include mat-checkbox-typography($mat-typography);

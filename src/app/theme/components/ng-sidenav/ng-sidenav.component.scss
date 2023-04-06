@@ -1,0 +1,59 @@
+@import '../../sass/conf/conf.scss';
+
+$top: 70px;
+
+aside.nav-menu {
+  top: $top;
+}
+
+ul.menu-list {
+  border-radius: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  > li.menu {
+    display: block;
+    float: none;
+    width: 100%;
+    > a.link {
+      position: relative;
+      color: var(--dark-text);
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      > i.fa,
+      .fab,
+      .fad,
+      .fal,
+      .far,
+      .fas {
+        min-width: 30px;
+        font-size: 20px;
+        margin-right: 0.5rem;
+        text-align: center;
+      }
+      > mat-icon {
+        margin-right: 0.5rem;
+      }
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &.active {
+        background-color: var(--primary-hex);
+        color: var(--white-text);
+        > mat-icon {
+          color: var(--white-text);
+        }
+      }
+    }
+  }
+  @include scrollNone();
+}

@@ -1,0 +1,940 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title d-flex align-items-center">
+      <span *ngIf="visible === 'edit' || visible ==='preview'">
+        <button class="btn btn-icon me-2" routerLink="/seekers">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </button>
+      </span>
+      <span *ngIf="visible === 'new'">Add New Seeker</span>
+      <span *ngIf="visible === 'edit'">Edit Seeker</span>
+      <span *ngIf="visible === 'preview'">View Seeker</span>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-4 col-xl-3" *ngIf="visible !== 'preview'">
+        <ul class="list-group list-group-flush fx-list mb-4">
+          <li class="list-group-item" [class.fx-active]="i === _tabSelection" *ngFor="let n of tabs; let i = index"
+            (click)="tabSelection(i)">{{n}}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-8 col-xl-9"> <!-- [ngClass]="visible !== 'preview' ? 'col-md-8 col-xl-9' : ''" -->
+        <ng-container *ngIf="_tabSelection === 0" [ngTemplateOutlet]="basicTemplate"></ng-container>
+        <ng-container *ngIf="_tabSelection === 1" [ngTemplateOutlet]="projectTemplate"></ng-container>
+        <ng-container *ngIf="_tabSelection === 2" [ngTemplateOutlet]="requirementTemplate"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #basicTemplate>
+  <h3 class="txt dark bold">Basic Details</h3>
+
+  <div class="row mb-4" [formGroup]="formOne">
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Skill Seeker / Client Business Name"
+          formControlName="businessName"
+          [ngClass]="{ 'is-invalid': f1?.businessName?.touched && f1?.businessName?.errors }" />
+        <label>Skill Seeker / Client Business Name*</label>
+        <div *ngIf="f1?.businessName?.touched && f1?.businessName?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.businessName?.errors?.required">Skill Seeker / Client Business Name is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4">
+        <select class="form-select" formControlName="businessDomain"
+          [ngClass]="{ 'is-invalid': f1?.businessDomain?.touched && f1?.businessDomain?.errors }">
+          <option [value]="null" hidden>Select Business Domain</option>
+          <option [value]="n?.domainId" *ngFor="let n of domains">{{n?.domainValues}}</option>
+        </select>
+        <label>Business Domain*</label>
+
+        <div *ngIf="f1?.businessDomain?.touched && f1?.businessDomain?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.businessDomain?.errors?.required">Business Domain is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-envelope"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Business Email Address" formControlName="businessEmail"
+          [ngClass]="{ 'is-invalid': f1?.businessEmail?.touched && f1?.businessEmail?.errors }" />
+        <label>Business Email Address*</label>
+
+        <div *ngIf="f1?.businessEmail?.touched && f1?.businessEmail?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.businessEmail?.errors?.required">Business Email Address is required</div>
+          <div *ngIf="f1?.businessEmail?.errors?.pattern">Please provide a valid email address</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-phone-alt"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Business Phone Number" formControlName="businessPhone"
+          (keypress)="onlyNumber($event)"
+          [ngClass]="{ 'is-invalid': f1?.businessPhone?.touched && f1?.businessPhone?.errors }" />
+        <label>Business Phone Number*</label>
+
+        <div *ngIf="f1?.businessPhone?.touched && f1?.businessPhone?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.businessPhone?.errors?.required">Business Phone Number is required</div>
+          <div *ngIf="f1?.businessPhone?.errors?.pattern">Please provide a valid phone number</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+          [ngClass]="{ 'is-invalid': f1?.firstName?.touched && f1?.firstName?.errors }" />
+        <label>First Name*</label>
+
+        <div *ngIf="f1?.firstName?.touched && f1?.firstName?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.firstName?.errors?.required">First Name is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+          [ngClass]="{ 'is-invalid': f1?.lastName?.touched && f1?.lastName?.errors }" />
+        <label>Last Name*</label>
+
+        <div *ngIf="f1?.lastName?.touched && f1?.lastName?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.lastName?.errors?.required">Last Name is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Employer Identification Number (EIN)"
+          formControlName="licenseNumber"
+          [ngClass]="{ 'is-invalid': f1?.licenseNumber?.touched && f1?.licenseNumber?.errors }" />
+        <label>Employer Identification Number</label>
+
+        <div *ngIf="f1?.licenseNumber?.touched && f1?.licenseNumber?.errors" class="invalid-feedback">
+          <div *ngIf="!f1?.licenseNumber?.errors?.pattern">Employer Identification Number is required</div>
+          <div *ngIf="f1?.licenseNumber?.errors?.pattern">Please enter the valid EIN. (XX-XXXXXXX)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Address Line 1" formControlName="address"
+          [ngClass]="{ 'is-invalid': f1?.address?.touched && f1?.address?.errors }" />
+        <label>Address Line 1*</label>
+
+        <div *ngIf="f1?.address?.touched && f1?.address?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.address?.errors?.required">Address Line 1 is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Address Line 2" formControlName="_address"
+          [ngClass]="{ 'is-invalid': f1?._address?.touched && f1?._address?.errors }" />
+        <label>Address Line 2</label>
+
+        <div *ngIf="f1?._address?.touched && f1?._address?.errors" class="invalid-feedback">
+          <div *ngIf="f1?._address?.errors?.required">Address Line 2 is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-4">
+      <div class="form-floating mb-4">
+        <select class="form-select" formControlName="state" (change)="getCities()"
+          [ngClass]="{'is-invalid': f1?.state?.touched && !f1?.state?.valid}">
+          <option [value]="null" hidden>Select State</option>
+          <option *ngFor="let n of _states" [value]="n?.state_name">{{n?.state_name}}</option>
+        </select>
+
+        <label>State*</label>
+
+        <div *ngIf="f1?.state?.touched && f1?.state?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.state?.errors?.required">State is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-4">
+      <div class="form-floating mb-4">
+        <select class="form-select" formControlName="city"
+          [ngClass]="{'is-invalid': f1?.city?.touched && !f1?.city?.valid}">
+          <option [value]="null" hidden>Select City</option>
+          <option *ngFor="let n of _cities" [value]="n?.city_name">{{n?.city_name}}</option>
+        </select>
+
+        <label>City*</label>
+
+        <div *ngIf="f1?.city?.touched && f1?.city?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.city?.errors?.required">City is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-4">
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" placeholder="Zipcode" formControlName="zipCode" maxlength="5"
+          (keypress)="onlyNumber($event)" [ngClass]="{ 'is-invalid': f1?.zipCode?.touched && f1?.zipCode?.errors }" />
+        <label>Zipcode*</label>
+
+        <div *ngIf="f1?.zipCode?.touched && f1?.zipCode?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.zipCode?.errors?.required">Zipcode is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-phone-alt"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Phone Number" formControlName="phoneNumber"
+          (keypress)="onlyNumber($event)"
+          [ngClass]="{ 'is-invalid': f1?.phoneNumber?.touched && f1?.phoneNumber?.errors }" />
+        <label>Phone Number*</label>
+
+        <div *ngIf="f1?.phoneNumber?.touched && f1?.phoneNumber?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.phoneNumber?.errors?.required">Phone Number is required</div>
+          <div *ngIf="f1?.phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-envelope"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Email Address" formControlName="email"
+          [ngClass]="{ 'is-invalid': f1?.email?.touched && f1?.email?.errors }" />
+        <label>Email Address*</label>
+
+        <div *ngIf="f1?.email?.touched && f1?.email?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.email?.errors?.required">Email Address is required</div>
+          <div *ngIf="f1?.email?.errors?.pattern">Please enter the valid email</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-phone-alt"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Alternative Phone Number" formControlName="_phoneNumber"
+          (keypress)="onlyNumber($event)"
+          [ngClass]="{ 'is-invalid': f1?._phoneNumber?.touched && f1?._phoneNumber?.errors }" />
+        <label>Alternative Phone Number</label>
+
+        <div *ngIf="f1?._phoneNumber?.touched && f1?._phoneNumber?.errors" class="invalid-feedback">
+          <div *ngIf="f1?._phoneNumber?.errors?.required">Alternative Phone Number is required</div>
+          <div *ngIf="f1?._phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4 fl-input-group">
+        <button class="btn ico ne">
+          <i class="fal fa-envelope"></i>
+        </button>
+
+        <input type="text" class="form-control" placeholder="Alternate Email Address" formControlName="_email"
+          [ngClass]="{ 'is-invalid': f1?._email?.touched && f1?._email?.errors }" />
+        <label>Alternative Email Address</label>
+
+        <div *ngIf="f1?._email?.touched && f1?._email?.errors" class="invalid-feedback">
+          <div *ngIf="f1?._email?.errors?.required">Alternative Email Address is required</div>
+          <div *ngIf="f1?._email?.errors?.pattern">Please enter the valid email</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="form-floating mb-4">
+        <select class="form-select" formControlName="status"
+          [ngClass]="{'is-invalid': f1?.status?.touched && !f1?.status?.valid}">
+          <option [value]="null" hidden>Select Status</option>
+          <option *ngFor="let n of status" [value]="n">{{n}}</option>
+        </select>
+        <label>Status*</label>
+
+        <div *ngIf="f1?.status?.touched && f1?.status?.errors" class="invalid-feedback">
+          <div *ngIf="f1?.status?.errors?.required">Status is required</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fx-border my-3" *ngIf="visible !== 'preview'"></div>
+  <div class="text-center" *ngIf="visible !== 'preview'">
+    <button class="btn text-danger" (click)="navigate('/seekers')">Cancel</button>
+    <button class="btn btn-primary" [disabled]="!formOne?.valid" (click)="saveBasicInfo()">Save Changes</button>
+  </div>
+</ng-template>
+
+<ng-template #projectTemplate>
+  <h3 class="txt dark bold mb-3">Projects Details</h3>
+
+  <div class="accordion" id="projectContainer">
+    <div class="accordion-item" *ngFor="let n of _projects; let i = index">
+      <h2 class="accordion-header d-flex align-items-center justify-content-between" [id]="'heading' + i">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
+          aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+          Project: {{f2(n)?.title?.value ? f2(n)?.title?.value : 'Untitled'}}
+        </button>
+        <div class="pe-3">
+          <button class="btn btn-icon" (click)="deleteProject(i)">
+            <i class="fal fa-trash text-danger"></i>
+          </button>
+        </div>
+      </h2>
+      <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i"
+        [ngClass]="i === 0 ? 'show' : ''" data-bs-parent="#projectContainer">
+        <div class="accordion-body">
+          <div class="row" [formGroup]="n">
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select formControlName="seekerName" class="form-select" aria-label="Default select example"
+                  [ngClass]="{ 'is-invalid': f2(n)?.seekerName?.touched && !f2(n)?.seekerName?.valid }">
+                  <option hidden selected [value]="null">Select Seeker Client</option>
+                  <option value="{{ d.id }}" *ngFor="let d of seekers">
+                    {{ d.skillSeekerName }}
+                  </option>
+                </select>
+                <label>Seeker Client*</label>
+
+                <div *ngIf="f2(n)?.seekerName?.touched && f2(n)?.seekerName?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.seekerName?.errors?.required">Seeker Client is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="domain"
+                  [ngClass]="{'is-invalid': f2(n)?.domain?.touched && !f2(n)?.domain?.valid}">
+                  <option [value]="null" hidden>Select Project Department</option>
+                  <option *ngFor="let n of domains" [value]="n?.domainId">{{n?.domainValues}}</option>
+                </select>
+                <label>Project Department*</label>
+
+                <div *ngIf="f2(n)?.domain?.touched && f2(n)?.domain?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.domain?.errors?.required">Project Department is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4 fr-input-group">
+                <input type="text" class="form-control" bsDatepicker #b1="bsDatepicker" [bsConfig]="bsConfig"
+                  placeholder="mm/dd/yyyy" formControlName="startDate" [minDate]="min"
+                  (ngModelChange)="startDateSelection(i)"
+                  [ngClass]="{ 'is-invalid me-bg': f2(n)?.startDate?.touched && f2(n)?.startDate?.errors }" />
+                <label>Start Date*</label>
+                <button class="btn ico" (click)="b1?.toggle()">
+                  <i class="fa fa-calendar primary-dark txt"> </i>
+                </button>
+                <div *ngIf="f2(n)?.startDate?.touched && f2(n)?.startDate?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).startDate?.errors?.required">Start Date is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4 fr-input-group">
+                <input type="text" class="form-control" bsDatepicker #b2="bsDatepicker" [bsConfig]="bsConfig"
+                  placeholder="mm/dd/yyyy" formControlName="endDate" [minDate]="f2(n)?._minDate?.value"
+                  [ngClass]="{ 'is-invalid me-bg': f2(n)?.endDate?.touched && f2(n)?.endDate?.errors }" />
+                <label>End Date*</label>
+                <button class="btn ico" (click)="b2?.toggle()">
+                  <i class="fa fa-calendar primary-dark txt"> </i>
+                </button>
+                <div *ngIf="f2(n)?.endDate?.touched && f2(n)?.endDate?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).endDate?.errors?.required">End Date is required</div>
+                  <div *ngIf="f2(n).endDate?.errors?.bsDate?.minDate">End Date has to be minimum of 30 days from start
+                    date</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating mb-4">
+                <input type="text" class="form-control" placeholder="Project title" formControlName="title"
+                  [ngClass]="{ 'is-invalid me-bg': f2(n)?.title?.touched && f2(n)?.title?.errors }" />
+                <label>Project Title*</label>
+                <div *ngIf="f2(n)?.title?.touched && f2(n)?.title?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).title?.errors?.required">Project Title is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <quill-editor [placeholder]="'Summary of the project'" [styles]="{ height: '175px' }"
+                formControlName="summary" [modules]="quillConfigs" class="d-block mb-4 editor"></quill-editor>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="form-floating mb-4 fl-input-group">
+                <button class="btn ico ne">
+                  <i class="fal fa-phone-alt"></i>
+                </button>
+
+                <input type="text" class="form-control" placeholder="Phone Number" formControlName="phoneNumber"
+                  (keypress)="onlyNumber($event)"
+                  [ngClass]="{ 'is-invalid': f2(n)?.phoneNumber?.touched && f2(n)?.phoneNumber?.errors }" />
+                <label>Phone Number*</label>
+
+                <div *ngIf="f2(n)?.phoneNumber?.touched && f2(n)?.phoneNumber?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.phoneNumber?.errors?.required">Phone Number is required</div>
+                  <div *ngIf="f2(n)?.phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="form-floating mb-4 fl-input-group">
+                <button class="btn ico ne">
+                  <i class="fal fa-envelope"></i>
+                </button>
+
+                <input type="text" class="form-control" placeholder="Email Address" formControlName="email"
+                  [ngClass]="{ 'is-invalid': f2(n)?.email?.touched && f2(n)?.email?.errors }" />
+                <label>Email Address*</label>
+
+                <div *ngIf="f2(n)?.email?.touched && f2(n)?.email?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.email?.errors?.required">Email Address is required</div>
+                  <div *ngIf="f2(n)?.email?.errors?.pattern">Please enter the valid email</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="form-floating mb-4 fl-input-group">
+                <button class="btn ico ne">
+                  <i class="fal fa-phone-alt"></i>
+                </button>
+
+                <input type="text" class="form-control" placeholder="Alternative Phone Number"
+                  formControlName="_phoneNumber" (keypress)="onlyNumber($event)"
+                  [ngClass]="{ 'is-invalid': f2(n)?._phoneNumber?.touched && f2(n)?._phoneNumber?.errors }" />
+                <label>Alternative Phone Number</label>
+
+                <div *ngIf="f2(n)?._phoneNumber?.touched && f2(n)?._phoneNumber?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?._phoneNumber?.errors?.required">Alternative Phone Number is required</div>
+                  <div *ngIf="f2(n)?._phoneNumber?.errors?.pattern">Please enter the valid phone number</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="form-floating mb-4 fl-input-group">
+                <button class="btn ico ne">
+                  <i class="fal fa-envelope"></i>
+                </button>
+
+                <input type="text" class="form-control" placeholder="Alternate Email Address" formControlName="_email"
+                  [ngClass]="{ 'is-invalid': f2(n)?._email?.touched && f2(n)?._email?.errors }" />
+                <label>Alternative Email Address</label>
+
+                <div *ngIf="f2(n)?._email?.touched && f1?._email?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?._email?.errors?.required">Alternative Email Address is required</div>
+                  <div *ngIf="f2(n)?._email?.errors?.pattern">Please enter the valid email</div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="technology"
+                  [ngClass]="{'is-invalid': f2(n)?.technology?.touched && !f2(n)?.technology?.valid}">
+                  <option [value]="null" hidden>Select Technology</option>
+                  <option *ngFor="let n of technologies" [value]="n?.technologyId">{{n?.technologyValues}}</option>
+                </select>
+                <label>Technology</label>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="role"
+                  [ngClass]="{'is-invalid': f2(n)?.role?.touched && !f2(n)?.role?.valid}">
+                  <option [value]="null" hidden>Select Role</option>
+                  <option *ngFor="let n of roles" [value]="n?.rolesId">{{n?.rolesDescription}}</option>
+                </select>
+                <label>Role</label>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="level"
+                  [ngClass]="{'is-invalid': f2(n)?.level?.touched && !f2(n)?.level?.valid}">
+                  <option [value]="null" hidden>Select Level</option>
+                  <option *ngFor="let n of levels" [value]="n?.skillSetLevelId">{{n?.skillLevelDescription}}</option>
+                </select>
+                <label>Level</label>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4 fl-input-group">
+                <input type="text" class="form-control" placeholder="Base rate" formControlName="baseRate"
+                  [ngClass]="{ 'is-invalid': f2(n)?.baseRate?.touched && f2(n)?.baseRate?.errors }" maxlength="6"
+                  (keypress)="onlyNumber($event)" />
+                <label>Base Rate</label>
+                <button class="btn ico">
+                  <i class="fa fa-dollar-sign primary-dark txt"></i>
+                </button>
+                <div *ngIf="f2(n)?.baseRate?.touched && f2(n)?.baseRate?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).baseRate?.errors?.required">Base Rate is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4 fl-input-group">
+                <input type="text" class="form-control" placeholder="Max rate" formControlName="maxRate"
+                  [ngClass]="{ 'is-invalid': f2(n)?.maxRate?.touched && f2(n)?.maxRate?.errors }" maxlength="6"
+                  (keypress)="onlyNumber($event)" />
+                <label> Max rate</label>
+                <button class="btn ico">
+                  <i class="fa fa-dollar-sign primary-dark txt"></i>
+                </button>
+                <div *ngIf="f2(n)?.maxRate?.touched && f2(n)?.maxRate?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).maxRate?.errors?.maximum">Max rate should be greater than or equal to base rate
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="row g-2  mb-4 align-items-center">
+                <div class="col-9">
+                  <div class="form-floating fr-input-group">
+                    <input type="text" class="form-control" placeholder="Max rate" formControlName="expiry" bsDatepicker
+                      #edx="bsDatepicker" [bsConfig]="bsConfig" placeholder="mm/dd/yyyy" readonly [minDate]="min"
+                      [ngClass]="{ 'is-invalid': f2(n)?.expiry?.touched && f2(n)?.expiry?.errors }" />
+                    <label>Expiry Date</label>
+
+                    <button class="btn ico" (click)="edx?.toggle()">
+                      <i class="fa fa-calendar primary-dark txt"> </i>
+                    </button>
+
+                    <div *ngIf="f2(n)?.expiry?.touched && f2(n)?.expiry?.errors" class="invalid-feedback">
+                      <div *ngIf="f2(n).expiry?.errors?.required">Expiry Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button class="btn btn-icon border-0" [disabled]="!projectTechnology(n)?.valid"
+                    (click)="addTechnology(n, i)">
+                    <i class="fa fa-plus-circle txt primary-dark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>Technology</td>
+                  <td>Role</td>
+                  <td>Level</td>
+                  <td>Base Rate</td>
+                  <td>Max Rate</td>
+                  <td>Expires On</td>
+                  <td>Status</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let n of projectTechnologies[i]; let ii = index">
+                  <td>{{ ii + 1 }}</td>
+                  <td>{{ __technologies[n?.technology]?.technologyValues }}</td>
+                  <td>{{ __roles[n?.role]?.rolesDescription }}</td>
+                  <td>{{ __levels[n?.level]?.skillLevelDescription }}</td>
+                  <td>{{ n?.baseRate | currency: 'USD' }}</td>
+                  <td>{{ n?.maxRate | currency: 'USD' }}</td>
+                  <td>{{ n?.expiry | date: 'shortDate' }}</td>
+                  <td>{{ n?.status }}</td>
+                  <td>
+                    <div class="d-flex align-items-center h-100">
+                      <button class="btn btn-icon" (click)="deleteTechnology(i, ii)">
+                        <i class="fal fa-trash text-danger"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="projectTechnologies[i]?.length === 0 || !projectTechnologies[i]" class="no-data">
+                  <td colspan="9">No technology information available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3">
+    <button class="btn btn-with-icon txt primary right" (click)="addProject()">
+      <i class="fal fa-plus-circle"> </i>Add Project
+    </button>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/seekers')">Cancel</button>
+    <button class="btn btn-primary" (click)="saveProjectInfo()">Save Changes</button>
+  </div>
+</ng-template>
+
+<ng-template #requirementTemplate>
+  <h3 class="txt dark bold mb-3">Requirement Details</h3>
+
+  <div class="accordion" id="requirementContainer">
+    <div class="accordion-item" *ngFor="let n of _requirements; let i = index">
+      <h2 class="accordion-header d-flex align-items-center justify-content-between" [id]="'heading' + i">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
+          aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+          Requirement: {{f2(n)?.jobTitle?.value ? f2(n)?.jobTitle?.value : 'Untitled'}}
+        </button>
+        <div class="pe-3">
+          <button class="btn btn-icon" (click)="deleteRequirement(i)">
+            <i class="fal fa-trash text-danger"></i>
+          </button>
+        </div>
+      </h2>
+
+      <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i"
+        [ngClass]="i === 0 ? 'show' : ''" data-bs-parent="#requirementContainer">
+        <div class="accordion-body">
+          <div class="row" [formGroup]="n">
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select formControlName="skillSeeker" class="form-select" aria-label="Default select example"
+                  (change)="seekerSelection($event, i)"
+                  [ngClass]="{ 'is-invalid': f2(n)?.skillSeeker?.touched && !f2(n)?.skillSeeker?.valid }">
+                  <option hidden selected [value]="null">Select Seeker Client</option>
+                  <option value="{{ d.id }}" *ngFor="let d of seekers">
+                    {{ d.skillSeekerName }}
+                  </option>
+                </select>
+                <label>Seeker Client*</label>
+
+                <div *ngIf="f2(n)?.skillSeeker?.touched && f2(n)?.skillSeeker?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.skillSeeker?.errors?.required">Seeker Client is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="project"
+                  [ngClass]="{'is-invalid': f2(n)?.project?.touched && !f2(n)?.project?.valid}"
+                  (change)="requirementProjectSelection($event, i)">
+                  <option [value]="null" hidden>Select Project</option>
+                  <option *ngFor="let n of requirementProjects[i]" [value]="n?.id">{{n?.title}}</option>
+                </select>
+                <label>Project*</label>
+
+                <div *ngIf="f2(n)?.project?.touched && f2(n)?.project?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.project?.errors?.required">Project is required</div>
+                </div>
+                <div *ngIf="requirementProjects[i]?.length === 0">
+                  <small class="text-danger">Projects doesn't exist</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="rateCard"
+                  [ngClass]="{'is-invalid': f2(n)?.rateCard?.touched && !f2(n)?.rateCard?.valid}"
+                  (change)="requirementRateSelection($event, i)">
+                  <option [value]="null" hidden>Select Rate Card</option>
+                  <option *ngFor="let n of requirementRatings[i]" [value]="n?.id">{{n?._rate}}</option>
+                </select>
+                <label>Rate Card*</label>
+
+                <div *ngIf="f2(n)?.rateCard?.touched && f2(n)?.rateCard?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.rateCard?.errors?.required">Rate Card is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="coreTechnology"
+                  [ngClass]="{'is-invalid': f2(n)?.coreTechnology?.touched && !f2(n)?.coreTechnology?.valid}">
+                  <option [value]="null" hidden>Select Core Technology</option>
+                  <option *ngFor="let n of technologies" [value]="n?.technologyId">{{n?.technologyValues}}</option>
+                </select>
+                <label>Core Technology*</label>
+
+                <div *ngIf="f2(n)?.coreTechnology?.touched && f2(n)?.coreTechnology?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.coreTechnology?.errors?.required">Core Technology is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="hiringPriority"
+                  [ngClass]="{'is-invalid': f2(n)?.hiringPriority?.touched && !f2(n)?.hiringPriority?.valid}">
+                  <option [value]="null" hidden>Select Hiring Priority</option>
+                  <option *ngFor="let n of priorities" [value]="n?.id">{{n?.hiringPriority}}</option>
+                </select>
+                <label>Hiring Priority*</label>
+
+                <div *ngIf="f2(n)?.hiringPriority?.touched && f2(n)?.hiringPriority?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.hiringPriority?.errors?.required">Hiring Priority is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating mb-4">
+                <input type="text" class="form-control" formControlName="jobTitle"
+                  [ngClass]="{ 'is-invalid': f2(n)?.jobTitle?.touched && f2(n)?.jobTitle?.errors }">
+                <label>Job Requirement Title*</label>
+
+                <div *ngIf="f2(n)?.jobTitle?.touched && f2(n)?.jobTitle?.errors" class="invalid-feedback">
+                  <div>Job Requirement Title is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <quill-editor [placeholder]="'Description'" [styles]="{ height: '175px' }"
+                formControlName="jobDescription" [modules]="quillConfigs" class="d-block mb-4 editor"></quill-editor>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-6">
+              <div class="card fx-card">
+                <div class="card-body v-1">
+                  <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <i class="bold fa fa-info-circle fs-22 inh txt"></i>
+                    </div>
+                    <div class="fxg">
+                      <h4 class="txt inh bold">Federal Security Clearance Check</h4>
+                      <p class="txt mb-0">Do you need the candidate(s) to have federal security clearance to work on
+                        this project?</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="row justify-content-between">
+                    <div class="col-auto">
+                      <a href="javascript:void(0)" class="fx-anchor"><i class="fal fa-info-circle me-2"></i>About</a>
+                    </div>
+                    <div class="col-auto">
+                      <mat-slide-toggle labelPosition="before" color="primary"
+                        formControlName="federalSecurityClearance">
+                        <span class="txt bold">{{f2(n)?.federalSecurityClearance?.value
+                          ? 'REQUIRED': 'NOT REQUIRED'}}</span>
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-6">
+              <div class="card fx-card">
+                <div class="card-body v-2">
+                  <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <i class="bold fa fa-info-circle fs-22 inh txt"></i>
+                    </div>
+                    <div class="fxg">
+                      <h4 class="txt inh bold">Screening Questions</h4>
+                      <p class="txt mb-0">Would you like to add pre-screening questions to shortlist the candidate(s)
+                        for this project?</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="row justify-content-between">
+                    <div class="col-auto">
+                      <a href="javascript:void(0)" class="fx-anchor"><i class="fal fa-info-circle me-2"></i>About</a>
+                    </div>
+                    <div class="col-auto">
+                      <mat-slide-toggle labelPosition="before" color="primary" formControlName="screeningQuestions">
+                        <span class="txt bold">{{f2(n)?.screeningQuestions?.value ? 'ENABLED': 'DISABLED'}}</span>
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="expYears"
+                  [ngClass]="{'is-invalid': f2(n)?.expYears?.touched && !f2(n)?.expYears?.valid}">
+                  <option [value]="null" hidden>Select Exp Years</option>
+                  <option *ngFor="let n of experience" [value]="n">{{n}}
+                  </option>
+                </select>
+                <label>Exp Years*</label>
+
+                <div *ngIf="f2(n)?.expYears?.touched && f2(n)?.expYears?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.expYears?.errors?.required">Exp Years is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <select class="form-select" formControlName="expMonths"
+                  [ngClass]="{'is-invalid': f2(n)?.expMonths?.touched && !f2(n)?.expMonths?.valid}">
+                  <option [value]="null" hidden>Select Exp Months</option>
+                  <option *ngFor="let n of months" [value]="n">{{n}}</option>
+                </select>
+                <label>Exp Months*</label>
+
+                <div *ngIf="f2(n)?.expMonths?.touched && f2(n)?.expMonths?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.expMonths?.errors?.required">Exp Months is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <input type="text" class="form-control" formControlName="jobLocation" [typeahead]="locations"
+                  [typeaheadHideResultsOnBlur]="true" container="body" [typeaheadScrollable]="true"
+                  [typeaheadOptionsInScrollableView]="7"
+                  [ngClass]="{ 'is-invalid': f2(n)?.jobLocation?.touched && f2(n)?.jobLocation?.errors }">
+                <label>Location*</label>
+
+                <div *ngIf="f2(n)?.jobLocation?.touched && f2(n)?.jobLocation?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n)?.jobLocation?.errors?.required">Location is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4 fr-input-group">
+                <input type="text" class="form-control" bsDatepicker #edp="bsDatepicker" [bsConfig]="bsConfig"
+                  placeholder="mm/dd/yyyy" formControlName="expiryDate"
+                  [ngClass]="{ 'is-invalid me-bg': f2(n)?.expiryDate?.touched && f2(n)?.expiryDate?.errors }" />
+                <label>Expiry Date*</label>
+                <button class="btn ico" (click)="edp?.toggle()">
+                  <i class="fa fa-calendar primary-dark txt"> </i>
+                </button>
+                <div *ngIf="f2(n)?.expiryDate?.touched && f2(n)?.expiryDate?.errors" class="invalid-feedback">
+                  <div *ngIf="f2(n).expiryDate?.errors?.required">Expiry Date is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <input type="text" class="form-control" placeholder="Original No of Positions"
+                  formControlName="originalPositions"
+                  [ngClass]="{ 'is-invalid': f2(n)?.originalPositions?.touched && f2(n)?.originalPositions?.errors }"
+                  (keypress)="onlyNumber($event)" />
+                <label>Original No of Positions*</label>
+
+                <div *ngIf="f2(n)?.originalPositions?.touched && f2(n)?.originalPositions?.errors"
+                  class="invalid-feedback">
+                  <div *ngIf="f2(n).originalPositions?.errors?.required">Original No of Positions is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-floating mb-4">
+                <input type="text" class="form-control" placeholder="Positions Available"
+                  formControlName="positionsAvailable"
+                  [ngClass]="{ 'is-invalid': f2(n)?.positionsAvailable?.touched && f2(n)?.positionsAvailable?.errors }"
+                  (keypress)="onlyNumber($event)" />
+                <label>Positions Available*</label>
+
+                <div *ngIf="f2(n)?.positionsAvailable?.touched && f2(n)?.positionsAvailable?.errors"
+                  class="invalid-feedback">
+                  <div *ngIf="f2(n).positionsAvailable?.errors?.required">Positions Available is required</div>
+                  <div *ngIf="f2(n).positionsAvailable?.errors?.minimum">Positions Available should be greater than 0
+                  </div>
+                  <div *ngIf="f2(n).positionsAvailable?.errors?.maximum">Available positions should be less than
+                    original positions</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex align-items-center">
+                  <div class="min-w-150">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" formControlName="remote">
+                      <label class="form-check-label">Remote</label>
+                    </div>
+                  </div>
+                  <div class="fxg">
+                    <mat-slider color="primary" [thumbLabel]="true" [max]="100" [min]="0"
+                      [disabled]="!f2(n)?.remote?.value" formControlName="remotePercent"></mat-slider>
+                    <span class="mb-0 txt bold fs-12">{{f2(n)?.remotePercent?.value ? f2(n)?.remotePercent?.value :
+                      '0'}}%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex align-items-center">
+                  <div class="min-w-150">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" formControlName="travel">
+                      <label class="form-check-label">Travel</label>
+                    </div>
+                  </div>
+                  <div class="fxg">
+                    <mat-slider color="primary" [thumbLabel]="true" [max]="100" [min]="0"
+                      [disabled]="!f2(n)?.travel?.value" formControlName="travelPercent"></mat-slider>
+                    <span class="mb-0 txt bold fs-12">{{f2(n)?.travelPercent?.value ? f2(n)?.travelPercent?.value :
+                      '0'}}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3">
+    <button class="btn btn-with-icon txt primary right" (click)="addRequirement()">
+      <i class="fal fa-plus-circle"> </i>Add Requirement
+    </button>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/seekers')">Cancel</button>
+    <button class="btn btn-primary" (click)="saveRequirementInfo()">Save Changes</button>
+  </div>
+</ng-template>

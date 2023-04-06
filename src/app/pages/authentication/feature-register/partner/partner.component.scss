@@ -1,0 +1,22 @@
+.m-h {
+  min-height: calc(100vh - 160px);
+}
+
+.btn.btn-x {
+  background-color: transparent;
+  color: var(--primary-hex);
+  width: 100%;
+  &.active {
+    background-color: inherit;
+    color: var(--primary-contrast-hex);
+  }
+}
+
+.bt-1 {
+  border-top: 1px solid var(--bs-border-color-translucent);
+}
+
+.fx-home {
+  position: absolute;
+  right: 1rem;
+}

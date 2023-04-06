@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title">Role Listings</h5>
+      <button class="btn btn-primary btn-with-icon right" routerLink="/employees-role/add">
+        <i class="fa fa-plus"></i>Add Role
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card" *ngFor="let n of roles">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Role ID</p>
+              <h5 class="txt dark bold mb-0">{{n?.roleId}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Role Name</p>
+              <h5 class="txt dark bold mb-0">{{n?.roleId}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Role Access</p>
+              <h5 class="txt dark bold mb-0 text-truncate">{{$any(n)['accessModules']}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt sm mb-1">Status</p>
+              <p class="mb-0 fs-13 badge fx" [ngClass]="
+                n?.status ? 'bg-success' : 'bg-danger'">
+                {{n?.status ? 'Active' : 'In Active'}}
+              </p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-6">
+            <div class="btn-group" dropdown container="body" placement="bottom right" [isDisabled]="n?.roleName === 'Admin'">
+              <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                <li role="menuitem" (click)="edit(n)">
+                  <a class="dropdown-item">Edit</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+      [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+    </mat-paginator> -->
+  </div>
+</div>

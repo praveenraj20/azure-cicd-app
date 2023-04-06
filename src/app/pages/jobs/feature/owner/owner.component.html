@@ -1,0 +1,109 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="avatar-flex">
+        <a class="avatar md">
+          <img [src]="avatar">
+        </a>
+        <div class="fxg">
+          <h5 class="txt dark bold mb-1">{{skillOwner?.firstName}} {{skillOwner?.lastName}}</h5>
+          <p class="txt sm mb-0">{{skillOwner?.expYears}} Year(s) {{skillOwner?.expMonths}} Month(s)</p>
+        </div>
+      </div>
+      <div class="position-relative fr-input-group w-fc d-none d-lg-block">
+        <button class="btn ico ne">
+          <i class="fal fa-search"></i>
+        </button>
+        <input type="text" class="form-control" placeholder="Search for Clients, Projects, Requirements"
+          [(ngModel)]="_search" (keyup)="searchFn($event)">
+      </div>
+      <div></div>
+      <!-- <button class="btn btn-primary btn-with-icon right" (click)="navigate('hiring')">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> Employees List
+      </button> -->
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card"
+      *ngFor="let n of (jobsHistory$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+
+          <div class="col-xl-1 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt sm mb-1">Job ID</p>
+              <h5 class="txt dark bold mb-0">{{n?.jobId}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt sm mb-1">Skill Seeker</p>
+              <h5 class="txt dark bold mb-0">{{n?.businessName}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Job Title</p>
+              <h5 class="txt dark bold mb-0">{{n?.jobTitle}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt sm mb-1">Job Location</p>
+              <h5 class="txt dark bold mb-0">{{!nullish.includes(n?.location) ? n?.location : '-'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-1 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt sm mb-1">Job Level & Experience</p>
+              <h5 class="txt dark bold mb-0">{{n?.expByName}} & {{n?.levelExperience}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-1 col-lg-4 col-md-4 col-4">
+            <div class="align-items-center d-flex h-100">
+              <p class="mb-0 badge cell" [ngClass]="
+            n?.hiringStatus === 'In Hiring' ? 'bg-success' :
+            n?.hiringStatus === 'New' ? 'bg-warning' :
+            n?.hiringStatus === 'Closed' ? 'bg-orange' : 'bg-danger'">
+                {{n?.hiringStatus ? n?.hiringStatus : '-'}}
+              </p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-4">
+            <div class="align-items-center d-flex h-100">
+              <p class="mb-0 badge cell" [ngClass]="
+            (n?.requirementPhases[n?.currentStage - 1]?.status === 'Scheduled' &&
+            n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName === 'INITIAL SCREENING') ||
+            n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName === 'OFFER RELEASE' ? 'bg-success' :
+            n?.requirementPhases[n?.currentStage - 1]?.status === 'Not Cleared' ? 'bg-danger' : 'bg-warning'">
+                {{ n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName ?
+                n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName : '-' }}
+              </p>
+            </div>
+          </div>
+          <div class="col-xl-1 col-lg-4 col-md-4 col-2">
+            <div class="d-flex align-items-center">
+              <div class="fxg">
+                <div class="btn-group" dropdown container="body" placement="bottom right">
+                  <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li role="menuitem" (click)="viewNotification(n)">
+                      <a class="dropdown-item">View job notification</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-4 col-12" *ngIf="(jobsHistory$ | async)?.length === 0" class="no-data">
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+      [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+    </mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5 class="card-title">Seeker Employee List</h5>
+      <div class="position-relative fr-input-group w-fc d-none d-lg-block">
+        <button class="btn ico ne">
+          <i class="fal fa-search"></i>
+        </button>
+        <input type="text" class="form-control" placeholder="Search for Employees" [(ngModel)]="_search" (keyup)="searchFn($event)">
+      </div>
+      <button class="btn btn-with-icon btn-primary right" routerLink="/employees-role/list">
+        <!-- <i class="fa fa-arrow-left" aria-hidden="true"></i> --> Roles Listing
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card" *ngFor="let n of (employees$ | async) ; let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Employee ID</p>
+              <h5 class="txt dark bold mb-0">EMP-{{n?.id}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Employee Name</p>
+              <h5 class="txt dark bold mb-0">{{n?.skillSeekerName}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Role</p>
+              <h5 class="txt dark bold mb-0">{{n?.subRoles?.subRoleDescription ? n?.subRoles?.subRoleDescription : '-'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Location</p>
+              <h5 class="txt dark bold mb-0">{{n?.city}}, {{n?.state}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Status</p>
+              <p class="txt bold mb-0" [ngClass]="n?.active ? 'text-success' : 'text-danger'">
+                {{n?.active ? 'Active' : 'Inactive'}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-4 col-12">
+            <div *ngIf="n?.subRoles?.subRoleDescription !=='Admin'" class="d-flex align-items-center h-100">
+              <div class="btn-group" dropdown container="body" placement="bottom right">
+                <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li role="menuitem" (click)="userMapping(n)"><a class="dropdown-item">User mapping</a></li>
+                  <li role="menuitem" (click)="changeStatus(n)"><a class="dropdown-item">Account status</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center p-4" *ngIf="(employees$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any employees.</h6>
+    </div>
+
+    <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+      [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+    </mat-paginator>
+  </div>
+</div>

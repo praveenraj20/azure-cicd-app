@@ -1,0 +1,10 @@
+.badge.fx {
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+}
+
+@for $i from 10 through 30 {
+  .fs-#{$i} {
+    font-size: #{$i}px;
+  }
+}

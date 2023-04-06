@@ -1,0 +1,45 @@
+<div class="modal modal-backdrop rightx nxt-3 d-block" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="txt bold dark fs-16 mb-0">Contract details</h5>
+        <button type="button" class="btn-close close dark fs-16 txt" (click)="_close()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-flex mb-4">
+          <a class="avatar md">
+            <img [src]="contractInfo?.avatar">
+          </a>
+          <div class="fxg">
+            <h5 class="txt mb-1 bold fs-16 primary-dark">{{contractInfo?.nameOfOwner}}</h5>
+            <p class="txt sm mb-1"><span class="bold">Position:</span> {{contractInfo?.position}}</p>
+            <p class="txt sm mb-0"><span class="bold">Experience:</span> {{contractInfo?.experience}}</p>
+          </div>
+        </div>
+
+        <div class="fx-progress-v" *ngFor="let n of contractInfo?.requirementPhaseList; let i = index"
+          [ngClass]="$any(n)?.stage < $any(contractInfo)?.currentStage ? 'success' : n?.stage === contractInfo?.currentStage ? 'review' : ''">
+          <div class="fxg">
+            <p class="txt sm mb-1">{{n?.requirementPhaseName}}</p>
+            <div class="d-flex align-items-center">
+              <p class="txt sm dark bold me-2 mb-0">{{n?.interviewDate ? (n?.interviewDate | date : 'shortDate') : '-'}}
+              </p>
+              <div class="fxg" *ngIf="getMsaStatus(n)">
+                <p class="badge fx-badge warning mb-0 py-2">{{contractInfo?.msaStatus}}</p>
+                <button class="btn btn-primary btn-sm" (click)="downloadMsa()">Download MSA</button>
+              </div>
+              <div class="fxg" *ngIf="getSowStatus(n)">
+                <p class="badge fx-badge warning mb-0 py-2">{{contractInfo?.sowStatus}}</p>
+                <button class="btn btn-primary btn-sm" (click)="downloadSow()">Download SOW</button>
+              </div>
+              <div class="fxg" *ngIf="getPoStatus(n)">
+                <p class="badge fx-badge warning mb-0 py-2">{{contractInfo?.poStatus}}</p>
+                <button class="btn btn-primary btn-sm" (click)="downloadPo()">Download PO</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

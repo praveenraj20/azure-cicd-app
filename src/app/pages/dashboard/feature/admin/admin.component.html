@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-body">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 col-md-6 col-xl-4 d-flex" *ngFor="let n of menus">
+          <div class="card flex-fill fx-card" (click)="navigate($any(n)?.route)">
+            <div class="card-body">
+              <div class="text-center">
+                <i class="fal fa-4x txt primary-dark mb-3" [class]="n?.icon"></i>
+                <h5 class="txt bold primary-dark">{{n?.title}}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="fx-action">
+          <a *ngFor="let n of navGroup" href="javascript:void(0)" class="txt primary-dark"
+            (click)="navigate($any(n)?.route)">
+            <i class="fal" [class]="n?.icon"></i>&nbsp;
+            {{n?.title}}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="ng-additionals">
+  <div class="dropdown">
+    <button mat-icon-button aria-label="History dropdown button" class="dropdown-toggle" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <mat-icon class="material-icons-outlined">notifications</mat-icon>
+    </button>
+    <ng-container [ngTemplateOutlet]="notification"></ng-container>
+  </div>
+  <div class="fx-user" dropdown container="body" placement="bottom right">
+    <button mat-button aria-label="Logout button" class="fx-mat" dropdownToggle [disableRipple]="true">
+      <div class="d-flex align-items-center">
+        <div class="u-info me-2">
+          <h5 class="txt bold dark mb-1">{{user?.firstName}} {{user?.lastName}}</h5>
+          <p class="txt fs-12">{{role}}</p>
+        </div>
+        <div class="avatar fx-avatar">
+          <img [src]="avatar">
+        </div>
+      </div>
+    </button>
+    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+      <li role="menuitem" (click)="logout()"><a class="dropdown-item">Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #history>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</ng-template>
+
+<ng-template #notification>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</ng-template>

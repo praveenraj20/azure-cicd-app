@@ -1,0 +1,13 @@
+<header class="top">
+  <div class="first-order">
+    <a routerLink="/dashboard" class="logo">
+      <img [src]="logo" alt="logo">
+    </a>
+    <button mat-icon-button aria-label="Hamburger menu" class="hamberger-menu" (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div class="second-order">
+    <ng-additionals></ng-additionals>
+  </div>
+</header>

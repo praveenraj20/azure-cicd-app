@@ -1,0 +1,42 @@
+.ng-additionals {
+  float: right;
+  padding: 0;
+  margin-bottom: 0;
+  display: flex;
+
+  button {
+    margin: 0 4px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  > .dropdown {
+    .dropdown-toggle::after {
+      display: none;
+    }
+  }
+}
+
+.u-info {
+  h5, p {
+    line-height: 1.25;
+    text-transform: capitalize;
+    text-align: right;
+    margin-bottom: 0;
+  }
+}
+
+.fx-avatar {
+  margin-right: 0;
+  height: 48px;
+  width: 48px;
+}
+
+.fx-mat {
+  padding-left: 6px;
+  padding-right: 6px;
+  &:hover {
+    border-radius: 8px;
+  }
+}

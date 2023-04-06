@@ -1,0 +1,85 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6 col-xl-8">
+        <div class="card fxc-gradient">
+          <div class="card-body">
+            <div class="fx">
+              <h2 class="txt bolder primary-dark text-capitalize text-truncate">Welcome {{user?.firstName}}!</h2>
+              <p class="txt">Profile completion: 100%</p>
+            </div>
+          </div>
+        </div>
+        <ng-container [ngTemplateOutlet]="menuTemplate"></ng-container>
+      </div>
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="fr-aside">
+          <div class="d-flex justify-content-between mb-3">
+            <h6 class="txt dark bold">Recent Updates</h6>
+          </div>
+          <ng-container *ngIf="notifications.length > 0" [ngTemplateOutlet]="notificationTemplate"></ng-container>
+          <div class="card" *ngIf="notifications?.length === 0">
+            <div class="card-body">
+              <div class="text-center">
+                <h5 class="txt dark bold mb-0">No notifications available.</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #menuTemplate>
+  <div class="row">
+    <div class="col-12 col-xl-6" *ngFor="let n of menus">
+      <div class="card fxd-menu" [class]="n?.style">
+        <div class="card-body">
+          <div class="row gutter-0">
+            <div class="col-3">
+              <div class="fx-icon">
+                <i class="fal fa-4x" [class]="n?.icon" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div class="col-9">
+              <h3 class="txt bolder mb-4">{{n?.title}}</h3>
+              <div class="d-flex">
+                <a href="javascript:void(0)" (click)="navigate(n)" class="txt bold text-decoration-underline">{{n?.crawler}}
+                </a>
+                &nbsp;&nbsp;<span><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #notificationTemplate>
+  <div *ngFor="let n of notifications; let j = index">
+    <p class="txt sm bold mt-2">{{ n?.date | date: 'fullDate' }}</p>
+    <div *ngFor="let nn of n?.items; let i = index">
+      <div class="card mb-3" [ngClass]="!nn.markAsRead ? 'to-read' : ''">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="txt bold dark mb-0">{{ nn?.title }}</h6>
+            <div *ngIf="!nn?.markAsRead" class="acg">
+              <i title="Mark as read" *ngIf="![2, 10].includes($any(nn)?.contentId)"
+               (click)="notificationRead(nn)" class="fa fa-circle fa-xs pointer"></i>
+            </div>
+          </div>
+          <p class="txt sm">{{ nn?.date | date : 'mediumDate' }} at {{ nn?.date | date : 'shortTime' }}</p>
+          <p class="txt sm">{{ nn?.content }}</p>
+          <div class="mt-3" *ngIf="[2,4,6,10].includes($any(nn)?.contentId) && !nn?.markAsRead">
+            <!-- Accept and schedule the interview -->
+            <button *ngIf="nn?.contentId !== 2 && nn?.contentId !== 4 && nn?.contentId !== 6" (click)="onAccept(nn)"  class="btn btn-sm btn-primary"
+              >Accept</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

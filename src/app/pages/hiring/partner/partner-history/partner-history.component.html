@@ -1,0 +1,185 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="avatar-flex">
+        <a class="avatar md">
+          <img [src]="avatar">
+        </a>
+        <div class="fxg">
+          <h5 class="txt dark bold mb-1">{{skillOwner?.firstName}} {{skillOwner?.lastName}}</h5>
+          <p class="txt sm mb-0">{{skillOwner?.expYears}} Year(s) {{skillOwner?.expMonths}} Month(s)</p>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-with-icon right" (click)="navigate('hiring')">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> Employees List
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <tabset #tabset>
+      <tab heading="Hiring History">
+        <div class="mt-3"></div>
+        <div class="card"
+          *ngFor="let n of (jobsHistory$ | async) | searchFilter: _search: ['jobId', 'location', 'jobTitle']; let i = index">
+          <div class="card-body">
+            <div class="row g-2 align-items-center">
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job ID</p>
+                  <h5 class="txt dark bold mb-0">{{n?.jobId}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Skill Seeker</p>
+                  <h5 class="txt dark bold mb-0">{{n?.businessName}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Title</p>
+                  <h5 class="txt dark bold mb-0 text-capitalize">{{n?.jobTitle}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Location</p>
+                  <h5 class="txt dark bold mb-0 text-capitalize">{{!nullish.includes(n?.location) ? n?.location : '-'}}
+                  </h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Level & Experience</p>
+                  <h5 class="txt dark bold mb-0">{{n?.expByName}} & {{n?.levelExperience}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Hiring Status</p>
+                  <p class="mb-0 fs-16 badge fx" [ngClass]="
+                    n?.hiringStatus === 'In Hiring' ? 'bg-success' :
+                    n?.hiringStatus === 'New' ? 'bg-warning' :
+                    n?.hiringStatus === 'Closed' ? 'bg-orange' : 'bg-danger'">
+                    {{n?.hiringStatus ? n?.hiringStatus : '-'}}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Hiring Stage</p>
+                  <p class="mb-0 fs-16 badge fx" [ngClass]="
+                    (n?.requirementPhases[n?.currentStage - 1]?.status === 'Scheduled' &&
+                    n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName === 'INITIAL SCREENING') ||
+                    n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName === 'OFFER RELEASE' ? 'bg-success' :
+                    n?.requirementPhases[n?.currentStage - 1]?.status === 'Not Cleared' ? 'bg-danger' : 'bg-warning'">
+                    {{ n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName ?
+                    n?.requirementPhases[n?.currentStage - 1]?.requirementPhaseName : '-' }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Date of Hiring</p>
+                  <h5 class="txt dark bold mb-0">{{ n?.requirementPhases[0]?.createdAt | date : 'MM/dd/yyyy' }}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="btn-group" dropdown container="body" placement="bottom right">
+                  <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li role="menuitem" (click)="viewNotification(n)">
+                      <a class="dropdown-item">View job notification</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center p-4" *ngIf="(jobsHistory$ | async)?.length === 0">
+          <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+          <h6 class="txt bold dark mb-0">You don't have any hiring history.</h6>
+        </div>
+
+        <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+          [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+        </mat-paginator>
+      </tab>
+      <tab heading="Job History">
+        <div class="mt-3"></div>
+        <div class="card" *ngFor="let n of jobHistory; let i = index">
+          <div class="card-body">
+            <div class="row g-2 align-items-center">
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job ID</p>
+                  <h5 class="txt dark bold mb-0">{{n?.jobId}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Skill Seeker</p>
+                  <h5 class="txt dark bold mb-0">{{n?.seekerName}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Title</p>
+                  <h5 class="txt dark bold mb-0 text-capitalize">{{n?.jobTitle}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Location</p>
+                  <h5 class="txt dark bold mb-0">{{!nullish.includes(n?.location) ? n?.location : '-'}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Job Level & Experience</p>
+                  <h5 class="txt dark bold mb-0">{{n?.levelExperience}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Contract Status</p>
+                  <p class="mb-0 fs-16 badge fx"
+                    [ngClass]="n?.contractStatus == 'Active' ? 'bg-success' : n?.contractStatus == 'Expired' ? 'bg-danger' : 'bg-success'">
+                    {{n?.contractStatus}}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">From Date</p>
+                  <h5 class="txt dark bold mb-0">{{n?.fromDate | date : 'MM/dd/yyyy'}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">To Date</p>
+                  <h5 class="txt dark bold mb-0">{{n?.toDate | date : 'MM/dd/yyyy'}}</h5>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="fxg">
+                  <p class="txt sm mb-1">Project</p>
+                  <h5 class="txt dark bold mb-0">{{n?.project}}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center p-4" *ngIf="jobHistory?.length === 0">
+          <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+          <h6 class="txt bold dark mb-0">You don't have any job history.</h6>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

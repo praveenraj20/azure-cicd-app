@@ -1,0 +1,914 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Professional Profile</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-4 col-xl-3">
+        <ul class="list-group list-group-flush fx-list">
+          <li class="list-group-item" [class.fx-active]="i === _tabSelection" *ngFor="let n of tabs; let i = index"
+            (click)="tabSelection(i)">{{n}}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-8 col-xl-9">
+        <ng-container *ngIf="_tabSelection === 0" [ngTemplateOutlet]="basicTemplate"></ng-container>
+        <ng-container *ngIf="_tabSelection === 1" [ngTemplateOutlet]="personalTemplate"></ng-container>
+        <ng-container *ngIf="_tabSelection === 2" [ngTemplateOutlet]="workTemplate"></ng-container>
+        <ng-container *ngIf="_tabSelection === 3" [ngTemplateOutlet]="skillTemplate"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #basicTemplate>
+  <div class="row g-0" [formGroup]="formOne">
+    <div class="col-12 col-md-10">
+      <h3 class="txt dark bold">Basic Profile</h3>
+      <div class="row mb-4">
+        <div class="col-auto">
+          <div class="d-flex">
+            <img [src]="profilePic" class="img-thumbnail fx-pic-thumbnail me-2" (click)="changePic()">
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <p class="badge fx-badge txt fs-16 px-4 py-2 mb-4" [ngClass]="f1?.status?.value ? 'primary' : 'danger'">
+            {{f1?.status?.value ? 'Active' : 'Inactive'}}</p>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" formControlName="status">
+            <label class="form-check-label txt bold">Available for Hire</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+              [ngClass]="{ 'is-invalid': f1?.firstName?.touched && f1?.firstName?.errors }" />
+            <label>First Name*</label>
+            <div *ngIf="f1?.firstName?.touched && f1?.firstName?.errors" class="invalid-feedback">
+              <div *ngIf="f1.firstName?.errors?.required">First Name is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+              [ngClass]="{ 'is-invalid': f1?.lastName?.touched && f1?.lastName?.errors }" />
+            <label>Last Name*</label>
+            <div *ngIf="f1?.lastName?.touched && f1?.lastName?.errors" class="invalid-feedback">
+              <div *ngIf="f1.lastName?.errors?.required">Last Name is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Primary Email Address"
+              [ngClass]="{ 'is-invalid': f1?.primaryEmail?.touched && f1?.primaryEmail?.errors }"
+              formControlName="primaryEmail" />
+            <label>Primary Email Address*</label>
+            <div *ngIf="f1?.primaryEmail?.touched && f1?.primaryEmail?.errors" class="invalid-feedback">
+              <div *ngIf="f1.primaryEmail?.errors?.required">Email Address is required.</div>
+              <div *ngIf="f1.primaryEmail?.errors?.pattern">Please provide a valid email address</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Primary Phone Number" formControlName="primaryContact"
+              [ngClass]="{ 'is-invalid': f1?.primaryContact?.touched && f1?.primaryContact?.errors }"
+              (keypress)="onlyNumber($event)" />
+            <label>Primary Phone Number*</label>
+            <div *ngIf="f1?.primaryContact?.touched && f1?.primaryContact?.errors" class="invalid-feedback">
+              <div *ngIf="f1.primaryContact?.errors?.required">Phone Number is required.</div>
+              <div *ngIf="f1.primaryContact?.errors?.pattern">Please provide a valid phone number</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Primary Email Address" formControlName="alternateEmail"
+              [ngClass]="{ 'is-invalid': f1?.alternateEmail?.touched && f1?.alternateEmail?.errors }" />
+            <label>Alternate Email Address</label>
+            <div *ngIf="f1?.alternateEmail?.touched && f1?.alternateEmail?.errors" class="invalid-feedback">
+              <div *ngIf="f1.alternateEmail?.errors?.required">Email Address is required.</div>
+              <div *ngIf="f1.alternateEmail?.errors?.pattern">Please provide a valid email address</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Primary Phone Number"
+              formControlName="alternateContact"
+              [ngClass]="{ 'is-invalid': f1?.alternateContact?.touched && f1?.alternateContact?.errors }"
+              (keypress)="onlyNumber($event)" />
+            <label>Alternate Phone Number</label>
+            <div *ngIf="f1?.alternateContact?.touched && f1?.alternateContact?.errors" class="invalid-feedback">
+              <div *ngIf="f1.alternateContact?.errors?.required">Phone Number is required.</div>
+              <div *ngIf="f1.alternateContact?.errors?.pattern">Please provide a valid phone number</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4 fr-input-group">
+            <input type="text" class="form-control" bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig"
+              [maxDate]="maxDate" placeholder="mm/dd/yyyy" formControlName="dob"
+              [ngClass]="{ 'is-invalid': f1?.dob?.touched && f1?.dob?.errors }" />
+            <label>Date of Birth*</label>
+            <button class="btn ico" (click)="dp?.toggle()">
+              <i class="fa fa-calendar primary-dark txt"> </i>
+            </button>
+            <div *ngIf="f1?.dob?.touched && f1?.dob?.errors" class="invalid-feedback">
+              <div *ngIf="f1.dob?.errors?.required">Date of Birth is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="gender">
+              <option [value]="null" hidden>Select Gender</option>
+              <option *ngFor="let n of genders" [value]="n?.id">
+                <span *ngIf="n?.gender == 'Male'">&#9794; </span>
+                <span *ngIf="n?.gender == 'Female'"> &#9792;</span>
+                <span *ngIf="n?.gender == 'Others'">&#9893;</span> {{ n?.gender }}
+              </option>
+            </select>
+            <label>Gender</label>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="txt dark bold">About Me</h3>
+
+      <div class="mb-4">
+        <textarea class="form-control" rows="5" formControlName="about" [maxlength]="restrictions.aboutMe"></textarea>
+        <p class="txt sm right i">{{f1?.about?.value?.length ? f1?.about?.value?.length : 0}}/{{restrictions.aboutMe}}
+          Characters</p>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <h4 class="txt dark fs-20 bold">Federal Security Clearance Certificate</h4>
+        <div class="d-flex align-items-center">
+          <h5 class="mb-0">
+            <p *ngIf="!_federalSecurity" style="color: grey; margin-top: 4px; padding: 9px">No</p>
+            <p *ngIf="_federalSecurity" style="color: #3cba54; margin-top: 4px; padding: 9px">Yes</p>
+          </h5>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" [checked]="_federalSecurity"
+              formControlName="federalSecurityClearance" (change)="fedaralSecurity($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4" *ngIf="_federalSecurity">
+        <div class="mb-2">
+          <p class="txt sm i">Please upload your Federal Security Clearance Certificate</p>
+        </div>
+
+        <div class="card fx-docs" *ngFor="let n of federalFile">
+          <div class="card-body p-3">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h5 class="txt bold dark text-truncate mb-0">{{n?.name}}</h5>
+              </div>
+              <div class="col-4 ms-auto">
+                <div class="row g-0">
+                  <div class="col-auto">
+                    <a [href]="n?.webkitRelativePath ? n?.webkitRelativePath : 'javascript:void(0)'"
+                      class="btn btn-with-icon txt primary">
+                      <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" (click)="uploadFedaral()">Upload Document</button>
+        <div *ngIf="federalFileShow" class="error">
+          <div class="text-danger sm">Federal security clearance certificate is required</div>
+        </div>
+      </div>
+
+      <div class="mb-4 mt-4">
+        <div class="mb-2">
+          <h3 class="txt dark bold mb-0">Upload Profile</h3>
+          <p class="txt sm i">Make sure you upload your latest resume here to get most relevant opportunities, upload
+            document format(.doc,.docx,.pdf).</p>
+        </div>
+
+        <div class="card fx-docs" *ngFor="let n of resumeFiles">
+          <div class="card-body p-3">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h5 class="txt bold dark text-truncate mb-0">{{n?.name}}</h5>
+              </div>
+              <div class="col-4 ms-auto">
+                <div class="row g-0">
+                  <div class="col-auto">
+                    <a [href]="n?.webkitRelativePath ? n?.webkitRelativePath : 'javascript:void(0)'"
+                      class="btn btn-with-icon txt primary">
+                      <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-sm" (click)="uploadResume()">Upload Profile</button>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-2">
+          <h3 class="txt dark bold mb-0">Other Documents</h3>
+          <p class="txt sm i">Attach cover letter, portfolio, your skillset presentations, etc.,</p>
+
+          <div class="card fx-docs" *ngFor="let n of otherFiles; let i = index">
+            <div class="card-body p-3">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h5 class="txt bold dark text-truncate mb-0">{{n?.name}}</h5>
+                </div>
+                <div class="col-4 ms-auto">
+                  <div class="row g-0">
+                    <div class="col-auto">
+                      <a [href]="n?.webkitRelativePath ? n?.webkitRelativePath : 'javascript:void(0)'"
+                        class="btn btn-with-icon txt primary">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                    <div class="col-auto">
+                      <a href="javascript:void(0)" class="btn btn-with-icon text-danger"
+                        (click)="deleteOtherFile(n, i)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-sm" (click)="uploadDocuments()">Add Other Document</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/dashboard')">Cancel</button>
+    <button class="btn btn-primary" [disabled]="!formOne?.valid"
+      (click)="saveBasicInfo()">Save Changes</button>
+  </div>
+</ng-template>
+
+<ng-template #personalTemplate>
+  <div class="row g-0" [formGroup]="formTwo">
+    <div class="col-12 col-md-10">
+      <div class="row mb-4">
+
+        <h3 class="txt dark bold">Personal Details</h3>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4 fr-input-group">
+            <input class="form-control" placeholder="000-00-0000" formControlName="ssn" [maxlength]="11"
+              [type]="toggler?.ssn ? 'text' : 'password'" inputmode="numeric"
+              [ngClass]="{ 'is-invalid me-bg': f2?.ssn?.touched && f2?.ssn?.errors }" />
+            <label>SSN*</label>
+
+            <button class="btn ico" type="button" (click)="toggler.ssn = !toggler.ssn">
+              <i class="fa" [ngClass]="{
+                'fa-eye-slash': !toggler?.ssn,
+                'fa-eye': toggler?.ssn
+              }">
+              </i>
+            </button>
+            <div *ngIf="f2?.ssn?.touched && f2?.ssn?.errors" class="invalid-feedback">
+              <div *ngIf="f2.ssn?.errors?.required">SSN is required</div>
+              <div *ngIf="f2.ssn?.errors?.pattern">Please enter a valid 9 digit SSN (XXX-XX-XXXX)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="years"
+              [ngClass]="{ 'is-invalid': f2?.years?.touched && f2?.years?.errors }">
+              <option [value]="null" hidden>Please select experience years</option>
+              <option [value]="n" *ngFor="let n of years">{{n}}</option>
+            </select>
+            <label>Experience Years*</label>
+            <div *ngIf="f2?.years?.touched && f2?.years?.errors" class="invalid-feedback">
+              <div *ngIf="f2.years?.errors?.required">Years of experience is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="months"
+              [ngClass]="{ 'is-invalid': f2?.months?.touched && f2?.months?.errors }">
+              <option [value]="null" hidden>Please select experience months</option>
+              <option [value]="n" *ngFor="let n of months">{{n}}</option>
+            </select>
+            <label>Experience Months*</label>
+            <div *ngIf="f2?.months?.touched && f2?.months?.errors" class="invalid-feedback">
+              <div *ngIf="f2.months?.errors?.required">Months of experience is required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <h3 class="txt dark bold mb-2">Visa</h3>
+        <h5 class="txt bold light mb-3">Do you have a Visa?</h5>
+        <div class="col-12 mb-3 d-flex">
+          <div class="form-check me-3">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" [checked]="haveVisa"
+              (change)="visaToggle(true)">
+            <label class="form-check-label">Yes</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" [checked]="!haveVisa"
+              (change)="visaToggle(false)">
+            <label class="form-check-label">No</label>
+          </div>
+        </div>
+
+        <ng-container *ngIf="haveVisa">
+          <div class="col-12 col-lg-6">
+            <div class="form-floating mb-4">
+              <select formControlName="visaType" class="form-select"
+                [ngClass]="{ 'is-invalid': f2?.visaType?.touched && f2?.visaType?.errors }">
+                <option hidden [value]="null">Select Status</option>
+                <option *ngFor="let n of visaStatuses" [value]="n?.visaId">
+                  {{ n?.visaStatus }}
+                </option>
+              </select>
+              <label>Visa Type*</label>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <div class="form-floating mb-4">
+              <select formControlName="usAuthorization" class="form-select"
+                [ngClass]="{ 'is-invalid': f2?.usAuthorization?.touched && f2?.usAuthorization?.errors }">
+                <option hidden [value]="null">Select Authorization</option>
+                <option *ngFor="let ii of optionals?.trueFalse" [value]="ii?.value">{{ii?.label}}</option>
+              </select>
+              <label>Work Authorization*</label>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <div class="form-floating mb-4">
+              <select formControlName="usc" class="form-select">
+                <option hidden [value]="null">Select USC</option>
+                <option *ngFor="let ii of optionals?.yesNo" [value]="ii?.value">{{ii?.label}}</option>
+              </select>
+              <label>USC*</label>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <div class="form-floating mb-4">
+              <select formControlName="visaStatus" class="form-select">
+                <option hidden [value]="null">Select Status</option>
+                <option [value]="true">Active</option>
+                <option [value]="false">Expired</option>
+              </select>
+              <label>Visa Status*</label>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6" *ngIf="f2?.visaStatus?.value">
+            <div class="form-floating mb-4 fr-input-group">
+              <input type="text" class="form-control" readonly placeholder="mm/dd/yyyy" bsDatepicker #vsd="bsDatepicker"
+                [bsConfig]="bsConfig" formControlName="visaStartDate"
+                [ngClass]="{ 'is-invalid me-bg': f2?.visaStartDate?.touched && f2?.visaStartDate?.errors }" />
+              <label>Visa Start Date*</label>
+              <button class="btn ico" (click)="vsd?.toggle()">
+                <i class="fa fa-calendar primary-dark txt"></i>
+              </button>
+              <div *ngIf="f2?.visaStartDate?.touched && f2?.visaStartDate?.errors" class="invalid-feedback">
+                <div *ngIf="f2.visaStartDate?.errors?.required">Visa Start Date is required</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6" *ngIf="f2?.visaStatus?.value">
+            <div class="form-floating mb-4 fr-input-group">
+              <input type="text" class="form-control" readonly placeholder="mm/dd/yyy" bsDatepicker #ved="bsDatepicker"
+                [bsConfig]="bsConfig" formControlName="visaEndDate"
+                [ngClass]="{ 'is-invalid me-bg': f2?.visaEndDate?.touched && f2?.visaEndDate?.errors }" />
+              <label>Visa End Date*</label>
+              <button class="btn ico" (click)="ved?.toggle()">
+                <i class="fa fa-calendar primary-dark txt"></i>
+              </button>
+              <div *ngIf="f2?.visaEndDate?.touched && f2?.visaEndDate?.errors" class="invalid-feedback">
+                <div *ngIf="f2.visaEndDate?.errors?.required">Visa End Date is required</div>
+                <div *ngIf="f2.visaEndDate?.errors?.minDate">Visa end date should be greater than start date</div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="row mb-4">
+        <h3 class="txt dark bold mb-2">Mailing address</h3>
+        <h5 class="txt bold light mb-3">Current</h5>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Address" formControlName="currentAddress"
+              [ngClass]="{ 'is-invalid': f2?.currentAddress?.touched && f2?.currentAddress?.errors }" />
+            <label>Address*</label>
+            <div *ngIf="f2?.currentAddress?.touched && f2?.currentAddress?.errors" class="invalid-feedback">
+              <div *ngIf="f2.currentAddress?.errors?.required">Address is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Address (Optional)" formControlName="currentAddress1"
+              [ngClass]="{ 'is-invalid': f2?.currentAddress1?.touched && f2?.currentAddress1?.errors }" />
+            <label>Address (Optional)</label>
+            <div *ngIf="f2?.currentAddress1?.touched && f2?.currentAddress1?.errors" class="invalid-feedback">
+              <div *ngIf="f2.currentAddress1?.errors?.required">Address is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="currentState" (change)="getCities(mailing.CURRENT)"
+              [ngClass]="{ 'is-invalid': f2?.currentState?.touched && f2?.currentState?.errors }">
+              <option [value]="null" hidden>Select State</option>
+              <option [value]="n?.state_name" *ngFor="let n of _states">{{n?.state_name}}</option>
+            </select>
+            <label>State*</label>
+            <div *ngIf="f2?.currentState?.touched && f2?.currentState?.errors" class="invalid-feedback">
+              <div *ngIf="f2.currentState?.errors?.required">State is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="currentCity"
+              [ngClass]="{ 'is-invalid': f2?.currentCity?.touched && f2?.currentCity?.errors }">
+              <option [value]="null" hidden>Select City</option>
+              <option [value]="$any(n)?.city_name" *ngFor="let n of _cities[mailing.CURRENT]">{{$any(n)?.city_name}}
+              </option>
+            </select>
+            <label>City*</label>
+            <div *ngIf="f2?.currentCity?.touched && f2?.currentCity?.errors" class="invalid-feedback">
+              <div *ngIf="f2.currentCity?.errors?.required">City is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Zipcode" (keypress)="onlyNumber($event)"
+              formControlName="currentZipcode" [maxlength]="restrictions.zipCode" [minlength]="restrictions.zipCode"
+              [ngClass]="{ 'is-invalid': f2?.currentZipcode?.touched && f2?.currentZipcode?.errors }" />
+            <label>Zipcode*</label>
+            <div *ngIf="f2?.currentZipcode?.touched && f2?.currentZipcode?.errors" class="invalid-feedback">
+              <div *ngIf="!(f2.currentZipcode?.errors?.minlength || f2.currentZipcode?.errors?.maxlength)">Zipcode is required</div>
+              <div *ngIf="f2.currentZipcode?.errors?.minlength || f2.currentZipcode?.errors?.maxlength">Zipcode must be 5 digits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <h5 class="txt bold light mb-2">Permanent</h5>
+        <div class="form-check mb-3 fx-check">
+          <input class="form-check-input" type="checkbox" [checked]="f2?.copy?.value" (change)="copyAddress($event)" />
+          <label class="form-check-label fs-14 txt">
+            Same as current mailing address
+          </label>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Address" formControlName="permanentAddress"
+              [ngClass]="{ 'is-invalid': f2?.permanentAddress?.touched && f2?.permanentAddress?.errors }" />
+            <label>Address*</label>
+            <div *ngIf="f2?.permanentAddress?.touched && f2?.permanentAddress?.errors" class="invalid-feedback">
+              <div *ngIf="f2.permanentAddress?.errors?.required">Address is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Address (Optional)" formControlName="permanentAddress1"
+              [ngClass]="{ 'is-invalid': f2?.permanentAddress1?.touched && f2?.permanentAddress1?.errors }" />
+            <label>Address (Optional)</label>
+            <div *ngIf="f2?.permanentAddress1?.touched && f2?.permanentAddress1?.errors" class="invalid-feedback">
+              <div *ngIf="f2.permanentAddress1?.errors?.required">Address is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="permanentState" (change)="getCities(mailing.PERMANENT)"
+              [ngClass]="{ 'is-invalid': f2?.permanentState?.touched && f2?.permanentState?.errors }">
+              <option [value]="null" hidden>Select State</option>
+              <option [value]="n?.state_name" *ngFor="let n of _states">{{n?.state_name}}</option>
+            </select>
+            <label>State*</label>
+            <div *ngIf="f2?.permanentState?.touched && f2?.permanentState?.errors" class="invalid-feedback">
+              <div *ngIf="f2.permanentState?.errors?.required">State is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <select class="form-select" formControlName="permanentCity"
+              [ngClass]="{ 'is-invalid': f2?.permanentCity?.touched && f2?.permanentCity?.errors }">
+              <option [value]="null" hidden>Select City</option>
+              <option [value]="$any(n)?.city_name" *ngFor="let n of _cities[mailing.PERMANENT]">{{$any(n)?.city_name}}
+              </option>
+            </select>
+            <label>City*</label>
+            <div *ngIf="f2?.permanentCity?.touched && f2?.permanentCity?.errors" class="invalid-feedback">
+              <div *ngIf="f2.permanentCity?.errors?.required">City is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Zipcode" (keypress)="onlyNumber($event)"
+              formControlName="permanentZipcode" [maxlength]="restrictions.zipCode" [minlength]="restrictions.zipCode"
+              [ngClass]="{ 'is-invalid': f2?.permanentZipcode?.touched && f2?.permanentZipcode?.errors }" />
+            <label>Zipcode*</label>
+            <div *ngIf="f2?.permanentZipcode?.touched && f2?.permanentZipcode?.errors" class="invalid-feedback">
+              <div *ngIf="!(f2.permanentZipcode?.errors?.minlength || f2.permanentZipcode?.errors?.maxlength)">Zipcode is required</div>
+              <div *ngIf="f2.permanentZipcode?.errors?.minlength || f2.permanentZipcode?.errors?.maxlength">Zipcode must be 5 digits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <h3 class="txt dark bold mb-2">Social profiles</h3>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Address" formControlName="linkedIn"
+              [ngClass]="{ 'is-invalid': f2?.linkedIn?.touched && f2?.linkedIn?.errors }" />
+            <label>LinkedIn</label>
+
+            <div *ngIf="f2?.linkedIn?.touched && f2?.linkedIn?.errors" class="invalid-feedback">
+              <div *ngIf="f2.linkedIn?.errors?.required">LinkedIn url is required</div>
+            </div>
+          </div>
+
+          <div class="acg" *ngFor="let n of portfolioUrl; let i = index" [formGroup]="n">
+            <div class="form-floating mb-4 fr-input-group">
+              <input type="text" class="form-control" placeholder="Address" formControlName="url"
+                [ngClass]="{ 'is-invalid me-bg': n?.get('url')?.touched && n?.get('url')?.errors }" />
+              <label>Portfolio URL</label>
+
+              <button class="btn ico" type="button" (click)="deletePortfolio(i)">
+                <i class="fal fa-trash" aria-hidden="true"> </i>
+              </button>
+
+              <div *ngIf="n?.get('url')?.touched && n?.get('url')?.errors" class="invalid-feedback">
+                <div *ngIf="n?.get('url')?.errors?.required">Portfolio URL is required</div>
+                <div *ngIf="n?.get('url')?.errors?.pattern">Enter the valid Portfolio URL</div>
+              </div>
+            </div>
+          </div>
+          <a href="javascript:void(0)" class="txt primary bold" (click)="addPortfolio()">
+            <i class="fa fa-plus"></i>&nbsp;Add URL
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/dashboard')">Cancel</button>
+    <button class="btn btn-primary" [disabled]="!formTwo?.valid" (click)="savePersonalInfo()">Save Changes</button>
+  </div>
+</ng-template>
+
+<ng-template #workTemplate>
+  <div class="row g-0" [formGroup]="formThree">
+    <div class="col-12 col-md-10">
+
+      <div class="row mb-4">
+        <h3 class="txt dark bold mb-2">Work Details</h3>
+        <h5 class="txt bold light mb-3">Current</h5>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Job Title" formControlName="title"
+              [ngClass]="{ 'is-invalid': f3?.title?.touched && f3?.title?.errors }" />
+            <label>Job Title*</label>
+
+            <div *ngIf="f3?.title?.touched && f3?.title?.errors" class="invalid-feedback">
+              <div *ngIf="f3.title?.errors?.required">Job Title is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Company Name" formControlName="company"
+              [ngClass]="{ 'is-invalid': f3?.company?.touched && f3?.company?.errors }" />
+            <label>Company Name*</label>
+
+            <div *ngIf="f3?.company?.touched && f3?.company?.errors" class="invalid-feedback">
+              <div *ngIf="f3.company?.errors?.required">Company Name is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4 fr-input-group">
+            <input type="text" class="form-control" bsDatepicker #csd="bsDatepicker" [bsConfig]="bsConfig"
+              placeholder="mm/dd/yyyy" formControlName="startDate"
+              [ngClass]="{ 'is-invalid me-bg': f3?.startDate?.touched && f3?.startDate?.errors }" />
+            <label>Contract Start Date*</label>
+            <button class="btn ico" (click)="csd?.toggle()">
+              <i class="fa fa-calendar primary-dark txt"> </i>
+            </button>
+            <div *ngIf="f3?.startDate?.touched && f3?.startDate?.errors" class="invalid-feedback">
+              <div *ngIf="f3.startDate?.errors?.required">Contract Start Date is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4 fr-input-group">
+            <input type="text" class="form-control" bsDatepicker #ced="bsDatepicker" [bsConfig]="bsConfig"
+              placeholder="mm/dd/yyyy" formControlName="endDate"
+              [ngClass]="{ 'is-invalid me-bg': f3?.endDate?.touched && f3?.endDate?.errors }" />
+            <label>Contract End Date*</label>
+            <button class="btn ico" (click)="ced?.toggle()">
+              <i class="fa fa-calendar primary-dark txt"> </i>
+            </button>
+            <div *ngIf="f3?.endDate?.touched && f3?.endDate?.errors" class="invalid-feedback">
+              <div *ngIf="f3.endDate?.errors?.required">Contract End Date is required.</div>
+              <div *ngIf="f3.endDate?.errors?.invalid">Contract end date should be greater than contract start date.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Project" formControlName="project"
+              [ngClass]="{ 'is-invalid': f3?.project?.touched && f3?.project?.errors }" />
+            <label>Project*</label>
+            <div *ngIf="f3?.project?.touched && f3?.project?.errors" class="invalid-feedback">
+              <div *ngIf="f3.project?.errors?.required">Project is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Department" formControlName="department"
+              [ngClass]="{ 'is-invalid': f3?.department?.touched && f3?.department?.errors }" />
+            <label>Department*</label>
+            <div *ngIf="f3?.department?.touched && f3?.department?.errors" class="invalid-feedback">
+              <div *ngIf="f3.department?.errors?.required">Department is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 mb-3">
+          <textarea class="form-control" rows="5" placeholder="Project Description" formControlName="description"
+            [maxlength]="restrictions.synopsis"></textarea>
+          <p class="txt sm right i">{{f3?.description?.value?.length ? f3?.description?.value?.length :
+            0}}/{{restrictions.synopsis}}
+            Characters</p>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4 fl-input-group">
+            <button class="btn ico ne">
+              <i class="fal fa-location-arrow"></i>
+            </button>
+
+            <select class="form-select" formControlName="location"
+              [ngClass]="{ 'is-invalid': f3?.location?.touched && f3?.location?.errors }">
+              <option [value]="null" hidden>Select Current Work State</option>
+              <option [value]="n?.state_name" *ngFor="let n of _states">{{n?.state_name}}</option>
+            </select>
+            <label>Current Working State*</label>
+
+            <div *ngIf="f3?.location?.touched && f3?.location?.errors" class="invalid-feedback">
+              <div *ngIf="f3.location?.errors?.required">Current Working State is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control" placeholder="Current Working Status" readonly value="Active" />
+            <label>Current Working Status</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/dashboard')">Cancel</button>
+    <button class="btn btn-primary" [disabled]="!formThree?.valid" (click)="saveClientInfo()">Save Changes</button>
+  </div>
+</ng-template>
+
+<ng-template #skillTemplate>
+  <h3 class="txt dark bold mb-2">My Technical Skillsets</h3>
+
+  <div class="row g-3" [formGroup]="formFour">
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <select class="form-select mb-3" formControlName="technology">
+        <option [value]="null" hidden>Technology</option>
+        <option *ngFor="let n of technologies" [value]="n?.technologyId">
+          {{ n?.technologyValues }}
+        </option>
+      </select>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <select class="form-select mb-3" formControlName="role">
+        <option [value]="null" hidden>Role</option>
+        <option *ngFor="let n of roles" [value]="n?.rolesId">
+          {{ n?.rolesDescription }}
+        </option>
+      </select>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <div class="col-lg-10">
+      <select class="form-select mb-3" formControlName="level">
+        <option [value]="null" hidden>Level</option>
+        <option *ngFor="let n of levels" [value]="n?.skillSetLevelId">
+          {{ n?.skillLevelDescription }}
+        </option>
+      </select>
+    </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <select class="form-select mb-3" formControlName="domain">
+        <option [value]="null" hidden>Domain</option>
+        <option *ngFor="let n of domains" [value]="n?.domainId">
+          {{ n?.domainValues }}
+        </option>
+      </select>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <div class="mb-3 input-group">
+        <input type="text" class="form-control" bsDatepicker #lsd="bsDatepicker" [bsConfig]="bsConfigFx"
+          [maxDate]="today" readonly placeholder="Last Used" formControlName="lastUsed" />
+        <button class="input-group-text" (click)="lsd?.toggle()">
+          <i class="fa fa-calendar primary-dark txt"> </i>
+        </button>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-4">
+      <div class="row g-1">
+        <div class="col-10">
+          <select class="form-select mb-3" formControlName="experience">
+            <option [value]="null" hidden>Experience</option>
+            <option *ngFor="let n of _experience" [value]="n">
+              {{ n }}
+            </option>
+          </select>
+        </div>
+        <div class="col-2">
+          <button class="btn border-0" (click)="addSkillSet()" [disabled]="!formFour?.valid">
+            <i class="fa fa-plus-circle primary-dark txt" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive mb-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="txt dark bold" scope="col">#</td>
+          <td class="txt dark bold" scope="col">Technology</td>
+          <td class="txt dark bold" scope="col">Role</td>
+          <td class="txt dark bold" scope="col">Level</td>
+          <td class="txt dark bold" scope="col">Domain</td>
+          <td class="txt dark bold" scope="col">Last Used</td>
+          <td class="txt dark bold" scope="col">Experience</td>
+          <td class="txt dark bold" scope="col">Actions</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let n of mySkillSets; let i = index">
+          <ng-container [ngTemplateOutlet]="$any(n)['edit'] ? editTemplate : readTemplate"
+            [ngTemplateOutletContext]="{n: n, i: i}"></ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="fx-border my-3"></div>
+  <div class="text-center">
+    <button class="btn text-danger" (click)="navigate('/dashboard')">Cancel</button>
+  </div>
+</ng-template>
+
+<input type="file" hidden #picSelector>
+
+<ng-template #readTemplate let-n="n" let-i="i">
+  <td>{{i + 1}}</td>
+  <td>{{n?.ownerSkillTechnologiesEntity?.technologyValues}}</td>
+  <td>{{n?.ownerSkillRolesEntity?.rolesDescription}}</td>
+  <td>{{n?.ownerSkillLevelEntity?.skillLevelDescription}}</td>
+  <td>{{n?.ownerSkillDomainEntity?.domainValues }}</td>
+  <td>{{n?.lastUsed}}</td>
+  <td>{{n?.experience}}</td>
+  <td>
+    <div class="d-flex align-items-center h-100">
+      <button class="btn btn-icon txt primary" (click)="editSkill(i)">
+        <i class="fal fa-pen"></i>
+      </button>
+      <button class="btn btn-icon txt text-danger" (click)="deleteSkill(i)">
+        <i class="fal fa-trash"></i>
+      </button>
+    </div>
+  </td>
+</ng-template>
+
+<ng-template #editTemplate let-n="n" let-i="i" [formGroup]="skillEdit">
+  <td>{{i + 1}}</td>
+  <td>
+    <select class="form-select" formControlName="technology">
+      <option [value]="null" hidden>Technology</option>
+      <option *ngFor="let n of technologies" [value]="n?.technologyId">
+        {{ n?.technologyValues }}
+      </option>
+    </select>
+  </td>
+  <td>
+    <select class="form-select" formControlName="role">
+      <option [value]="null" hidden>Role</option>
+      <option *ngFor="let n of roles" [value]="n?.rolesId">
+        {{ n?.rolesDescription }}
+      </option>
+    </select>
+  </td>
+  <td>
+    <select class="form-select" formControlName="level">
+      <option [value]="null" hidden>Level</option>
+      <option *ngFor="let n of levels" [value]="n?.skillSetLevelId">
+        {{ n?.skillLevelDescription }}
+      </option>
+    </select>
+  </td>
+  <td>
+    <select class="form-select" formControlName="domain">
+      <option [value]="null" hidden>Domain</option>
+      <option *ngFor="let n of domains" [value]="n?.domainId">
+        {{ n?.domainValues }}
+      </option>
+    </select>
+  </td>
+  <td>
+    <div class="input-group">
+      <input type="text" class="form-control" bsDatepicker #lse="bsDatepicker" [bsConfig]="bsConfigFx" [maxDate]="today"
+        readonly placeholder="mm-yyyy" formControlName="lastUsed" />
+      <button class="input-group-text" (click)="lse?.toggle()">
+        <i class="fa fa-calendar primary-dark txt"> </i>
+      </button>
+    </div>
+  </td>
+  <td>
+    <select class="form-select" formControlName="experience">
+      <option [value]="null" hidden>Experience</option>
+      <option *ngFor="let n of _experience" [value]="n">
+        {{ n }}
+      </option>
+    </select>
+  </td>
+  <td>
+    <div class="d-flex align-items-center h-100">
+      <button class="btn btn-icon txt primary" (click)="saveSkillSet(i)">
+        <i class="fal fa-check-circle"></i>
+      </button>
+      <button class="btn btn-icon txt text-danger" (click)="cancelSkillSet(i)">
+        <i class="fal fa-times-circle"></i>
+      </button>
+    </div>
+  </td>
+</ng-template>

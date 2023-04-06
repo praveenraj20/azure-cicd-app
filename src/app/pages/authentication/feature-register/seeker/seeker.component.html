@@ -1,0 +1,292 @@
+<div class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-12 col-lg-8 offset-lg-2">
+        <div class="card m-h">
+          <ng-container [ngTemplateOutlet]="oneTemplate" *ngIf="step === 1"></ng-container>
+          <ng-container [ngTemplateOutlet]="twoTemplate" *ngIf="step === 2"></ng-container>
+          <ng-container [ngTemplateOutlet]="threeTemplate" *ngIf="step === 3"></ng-container>
+          <ng-container [ngTemplateOutlet]="fourTemplate" *ngIf="step === 4"></ng-container>
+          <ng-container [ngTemplateOutlet]="fiveTemplate" *ngIf="step === 5"></ng-container>
+          <ng-container [ngTemplateOutlet]="sixTemplate" *ngIf="step === 6"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #oneTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'What is the nature of your business?'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <select class="form-select" formControlName="domain"
+              [ngClass]="{'is-invalid': f?.domain?.touched && !f?.domain?.valid}">
+              <option [value]="null" hidden>Nature of Business</option>
+              <option *ngFor="let n of domains" [value]="n?.domainId">{{n?.domainValues}}</option>
+            </select>
+            <label>Nature of Business</label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center">
+      <button class="btn btn-link secondary btn-with-icon right" (click)="navigate('/register')">
+        <i aria-hidden="true" class="fa-arrow-left fas"></i>Back
+      </button>
+
+      <button class="btn btn-link btn-with-icon left" [disabled]="!f?.domain?.valid" (click)="next(2)">
+        Next<i aria-hidden="true" class="fa-arrow-right fas"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #twoTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'Where is your business located?'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <select class="form-select" formControlName="state" (change)="getCities()"
+              [ngClass]="{'is-invalid': f?.state?.touched && !f?.state?.valid}">
+              <option [value]="null" hidden>Select State</option>
+              <option *ngFor="let n of _states" [value]="n?.state_name">{{n?.state_name}}</option>
+            </select>
+            <label>State</label>
+          </div>
+
+          <div class="form-floating mb-3" *ngIf="f?.state?.valid">
+            <select class="form-select" formControlName="city"
+              [ngClass]="{'is-invalid': f?.city?.touched && !f?.city?.valid}">
+              <option [value]="null" hidden>Select City</option>
+              <option *ngFor="let n of _cities" [value]="n?.city_name">{{n?.city_name}}</option>
+            </select>
+            <label>City</label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center">
+      <button class="btn btn-link secondary btn-with-icon right" (click)="previous(1)">
+        <i aria-hidden="true" class="fa-arrow-left fas"></i>Back
+      </button>
+
+      <button class="btn btn-link btn-with-icon left" [disabled]="!stepTwo?.valid" (click)="next(3)">
+        Next<i aria-hidden="true" class="fa-arrow-right fas"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #threeTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'Tell us a little about your business...'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="Business Name" formControlName="businessName"
+              [ngClass]="{ 'is-invalid': f?.businessName?.touched && f?.businessName?.errors }">
+            <label>Business Name</label>
+
+            <div *ngIf="f?.businessName?.touched && f?.businessName?.errors" class="invalid-feedback">
+              <div *ngIf="f.businessName?.errors?.required">Business Name is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3 fr-input-group">
+            <input type="text" class="form-control right" placeholder="Employer Identification Number (EIN)"
+              formControlName="businessNumber"
+              [ngClass]="{ 'is-invalid': f?.businessNumber?.touched && f?.businessNumber?.errors }">
+            <label>Employer Identification Number (EIN)</label>
+
+            <button *ngIf="!(f?.businessNumber?.touched && f?.businessNumber?.errors)" class="btn ico ne">
+              <i class="fal fa-lock"></i>
+            </button>
+
+            <div *ngIf="f?.businessNumber?.touched && f?.businessNumber?.errors" class="invalid-feedback">
+              <div *ngIf="!f.businessNumber?.errors?.pattern">Employer Identification Number is required</div>
+              <div *ngIf="f.businessNumber?.errors?.pattern">Please enter the valid EIN. (XX-XXXXXXX)</div>
+            </div>
+          </div>
+          <div class="form-text">In order to post a job requirement, you need to provide your Employer Identification
+            Number (EIN).</div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center">
+      <button class="btn btn-link secondary btn-with-icon right" (click)="previous(2)">
+        <i aria-hidden="true" class="fa-arrow-left fas"></i>Back
+      </button>
+
+      <button class="btn btn-link btn-with-icon left" [disabled]="!stepThree?.valid" (click)="next(4)">
+        Next<i aria-hidden="true" class="fa-arrow-right fas"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #fourTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'By what name do we call you?'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+              [ngClass]="{ 'is-invalid': f?.firstName?.touched && f?.firstName?.errors }">
+            <label>First Name</label>
+
+            <div *ngIf="f?.firstName?.touched && f?.firstName?.errors" class="invalid-feedback">
+              <div *ngIf="f.firstName?.errors?.required">First Name is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+              [ngClass]="{ 'is-invalid': f?.lastName?.touched && f?.lastName?.errors }">
+            <label>Last Name</label>
+
+            <div *ngIf="f?.lastName?.touched && f?.lastName?.errors" class="invalid-feedback">
+              <div *ngIf="f.lastName?.errors?.required">Last Name is required</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center">
+      <button class="btn btn-link secondary btn-with-icon right" (click)="previous(3)">
+        <i aria-hidden="true" class="fa-arrow-left fas"></i>Back
+      </button>
+
+      <button class="btn btn-link btn-with-icon left" [disabled]="!stepFour?.valid" (click)="next(5)">
+        Next<i aria-hidden="true" class="fa-arrow-right fas"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #fiveTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'How do we contact you?', j: 'You will receive a verification code to your email.'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3 fl-input-group">
+            <button class="btn ico ne">
+              <i class="fal fa-envelope"></i>
+            </button>
+
+            <input type="text" class="form-control" placeholder="Email Address" formControlName="emailId"
+              [ngClass]="{ 'is-invalid': f?.emailId?.touched && f?.emailId?.errors }">
+            <label>Email Address</label>
+
+            <div *ngIf="f?.emailId?.touched && f?.emailId?.errors" class="invalid-feedback">
+              <div *ngIf="f.emailId?.errors?.required">Email Address is required</div>
+              <div *ngIf="f.emailId?.errors?.pattern">Please provide a valid email address</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3 fl-input-group">
+            <button class="btn ico ne">
+              <i class="fal fa-phone-alt"></i>
+            </button>
+
+            <input type="text" class="form-control" placeholder="Phone Number" formControlName="phone"
+              (keypress)="onlyNumber($event)" [ngClass]="{ 'is-invalid': f?.phone?.touched && f?.phone?.errors }">
+            <label>Phone Number</label>
+
+            <div *ngIf="f?.phone?.touched && f?.phone?.errors" class="invalid-feedback">
+              <div *ngIf="f.phone?.errors?.required">Phone Number is required</div>
+              <div *ngIf="f.phone?.errors?.pattern">Please provide a valid phone number</div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="acceptTerms" />
+              <label class="dark form-check-label fs-12 txt">
+                By continuing, I agree to FlexCub’s
+                <span>
+                  <a href="javascript:void(0)" class="bold primary txt fs-12">Privacy Policy</a> &
+                  <a href="javascript:void(0)" class="bold primary txt fs-12">Terms of Service</a>
+                </span>
+              </label>
+            </div>
+          </div>
+        </form>
+        <button class="btn btn-primary w-100 mb-3 py-3" [disabled]="!stepFive?.valid || !f?.acceptTerms?.value"
+          type="submit" (click)="onSubmit()">
+          Proceed</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="text-center">
+      <button class="btn btn-link secondary btn-with-icon right" (click)="previous(4)">
+        <i aria-hidden="true" class="fa-arrow-left fas"></i>Back
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #sixTemplate>
+  <div class="card-body p-4">
+    <ng-container [ngTemplateOutlet]="headingTemplate"
+      [ngTemplateOutletContext]="{n: 'Please confirm your email address'}"></ng-container>
+    <div class="row">
+      <div class="col-12 col-md-8 offset-md-2">
+        <div class="text-center">
+          <div class="mb-3">
+            <i class="fal fa-envelope fa-5x text-success"></i>
+          </div>
+          <h4 class="txt bold dark">We have sent a verification code to the email {{f?.emailId?.value}}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="my-3 bt-1"></div>
+    <div class="text-center">
+      <p class="txt">
+        No Message received?
+        <span><a href="javascript:void(0)" class="bold primary txt text-decoration-underline" (click)="resend()">Resend Sign-Up
+            Email</a></span> <br> make sure to check your spam or
+        junk folders - the email was sent by <span><a href="mailto:no-reply@flexcub.com"
+            class="bold primary txt text-decoration-underline">no-reply@flexcub.com</a></span>
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #headingTemplate let-n="n" let-j="j">
+  <div class="mb-4 text-center">
+    <div class="logo mb-4">
+      <div class="fx-home">
+        <button class="btn btn-icon" (click)="navigate('/register')">
+          <i class="bolder fa-home-alt fal fs-22 primary txt" aria-hidden="true"></i>
+        </button>
+      </div>
+      <img src="assets/images/logo-flexcub.svg" alt="logo" class="logo" />
+    </div>
+    <h2 class="txt primary-dark bolder" [ngClass]="j ? 'mb-1' : 'mb-4'">{{n}}</h2>
+    <p class="txt mb-4" *ngIf="j">
+      <i aria-hidden="true" class="fa-info-circle fal"></i> {{j}}
+    </p>
+  </div>
+</ng-template>

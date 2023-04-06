@@ -1,0 +1,25 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: flexcub-ui
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flexcub-ui
+  template:
+    metadata:
+      labels:
+        app: flexcub-ui
+    spec:
+      containers:
+        - name: flexcub-ui
+          image: vasanthdev/flex-ui:1
+          ports:
+            - containerPort: 80
+
+
+
+
+            

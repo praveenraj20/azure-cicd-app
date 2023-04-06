@@ -1,0 +1,204 @@
+<main>
+    <ng-container [ngTemplateOutlet]="one" *ngIf="step === 1"></ng-container>
+    <ng-container [ngTemplateOutlet]="two" *ngIf="step === 2"></ng-container>
+    <ng-container [ngTemplateOutlet]="three" *ngIf="step === 3"></ng-container>
+</main>
+
+
+<ng-template #one>
+  <div class="card">
+    <div class="col-md-12 card-header create-agreement-header d-flex justify-content-between align-items-center">
+      <h4 class="mb-0" (click)="selectionbar()"><i class="fa fa-angle-left px-2" title="Go Back"></i>Create New SOW</h4>
+      <button class="btn btn-outline-danger" (click)="selectionbar()">Cancel</button>
+    </div>
+
+    <div class="card-body client-body mb-5 mt-5 pb-5 pt-5">
+      <div class="text-center">
+        <h4 class="mb-3 txt primary-dark">Select a Candidate and the respective project</h4>
+        <p>If you do not know the client or project, you can select “Default” as the option.</p>
+      </div>
+      <div [formGroup]="form1">
+        <div class="row client-form d-flex flex-column justify-content-center">
+          <div class="form-group offset-md-4 col-md-4 pt-3">
+            <div class="form-group form-floating mb-3 mt-3">
+              <input type="text" class="form-control" placeholder="Candidate Name" name="CandidateName" formControlName="candidateName" />
+              <label for="candidate">Candidate Name*</label>
+            </div>
+            <div class="form-group form-floating mb-3">
+              <select formControlName="project" class="form-control form-select" (change)="projectChange()">
+                  <option hidden selected value="">Select Project</option>
+                  <option *ngFor="let project of projectName" [ngValue]="project.id">
+                      {{ project.title }}
+                  </option>
+              </select>
+              <label>Select Project</label>
+          </div>
+
+          <div class="form-group form-floating mb-3">
+            <select formControlName="department" class="form-control form-select" (change)="departmentChange()">
+                <option hidden selected value="">Select Department</option>
+                <option *ngFor="let department of domainList" [ngValue]="department.domainId">
+                  {{ department.domainValues }}
+                </option>
+            </select>
+            <label>Select Department</label>
+          </div>
+          <div class="form-group form-floating mb-3 mt-3">
+            <input [readOnly] type="text" class="form-control" placeholder="Role" name="Role" formControlName="role" />
+            <label for="role">Role*</label>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer create-new-footer mt-5 d-flex justify-content-center">
+      <button (click)="next(2)" [disabled]="!form1.valid" class="btn btn-primary">
+        Proceed <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #two>
+    <div class="card">
+        <div class="card-header bg-white">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title txt bold mb-2 mt-2">
+                        <i title="Go Back" (click)="next(1)" aria-hidden="true" class="fa fa-chevron-left mx-2"></i>
+                        Statement of Works
+                    </h5>
+                    <button class="btn btn-outline-danger" (click)="next(1)"><i class="fa fa-plus"
+                        aria-hidden="true"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body upload-agreement text-center">
+            <h5 class="mb-0 txt primary-dark">Upload your SOW document</h5>
+            <p class="pb-3">
+              Save your time by downloading our curated service agreement and make modifications as required. Otherwise, you can upload your own.
+            </p>
+
+            <div class="card upload-sow text-center">
+              <div [formGroup]="agreeDocs">
+                <img src="assets/images/icon-documents.svg" width="50px" class="m-auto mt-4" />
+                <p>Drag and drop or browse files to upload pdf.</p>
+                <div>
+                  <a role="button" (click)="downloadSow()">Download template</a>
+                </div>
+                <div class="form-group">
+                  <div *ngIf="file2" class="display">
+                    <div *ngFor="let a of Agreefilestemp; let j = index" class="d-flex align-items-center justify-content-center">
+                      <div class="card" style="width: 300px; margin: 5px 0px">
+                        <div class="card-body row">
+                          <div class="col-12">
+                            {{ a.agreementfile.name }}
+                            <div class="progress" style="height: 5px">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                [style.width]="progressValue + '%'"
+                                aria-valuenow="25"
+                                aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      &nbsp;&nbsp;&nbsp;
+                      <div *ngIf="file2" class="delete-icon" (click)="remove(j)">
+                        <img src="assets/images/icon-delete.svg" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="uploader mt-3">
+                  <input
+                    (change)="agreefile($event)"
+                    accept="application/pdf"
+                    type="file"
+                    formControlName="agreeDocument"
+                    class="d-none"
+                    id="agreefile" />
+                  <div class="mb-4">
+                    <button class="btn btn-outline-primary" id="files" onclick="document.getElementById('agreefile').click();">Browse Files</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button (click)="upload()" class="btn btn-primary">Upload</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer create-agreement-footer mt-5 d-flex justify-content-center">
+            <button (click)="next(1)" class="btn back-btn"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
+            <button (click)="next(3)" [disabled]="!preview" class="btn text-primary"><i class="fa fa-eye" aria-hidden="true"></i> Preview</button>
+          </div>
+    </div>
+</ng-template>
+
+<ng-template #three>
+  <div class="card">
+    <div class="card-header bg-white">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title txt bold mb-2 mt-2">
+                    <i title="Go Back" (click)="next(2)" aria-hidden="true" class="fa fa-chevron-left mx-2"></i>
+                    Statement of Works
+                </h5>
+                <button class="btn btn-primary" (click)="send()"><i class="fa fa-plus"
+                    aria-hidden="true"></i> Send SOW</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body preview-info">
+      <img src="assets/images/preview-tag-ribbon.png" width="50px" class="tag p-0" />
+      <div class="position-relative">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 pt-3">Statement of Work for:</p>
+            <h2 class="text-primary">{{ this.form1.value.candidateName }}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <p>Role:</p>
+            <h5 class="text-primary">{{ skillOwnerRole }}</h5>
+          </div>
+          <div class="col-sm-2">
+            <p>Project</p>
+            <h5 class="text-primary">{{ projectname }}</h5>
+          </div>
+          <div class="col-sm-2">
+            <p>Department</p>
+            <h5 class="text-primary">{{ departmentname }}</h5>
+          </div>
+          <div class="col-sm-2">
+            <p>Version</p>
+            <h5 class="text-primary">1.0</h5>
+          </div>
+          <div class="col-sm-2">
+            <p>Created On</p>
+            <h5 class="text-primary">{{ today | date : 'yyyy-MMM-dd' }}</h5>
+          </div>
+        </div>
+      </div>
+      <pdf-viewer
+      [src]="src"
+      [rotation]="0"
+      [original-size]="false"
+      [show-all]="true"
+      [fit-to-page]="false"
+      [zoom]="1"
+      [stick-to-page]="false"
+      [render-text]="true"
+      [external-link-target]="'blank'"
+      [autoresize]="true"
+      [show-borders]="false"
+      style="width: 100%; height: 600px">
+    </pdf-viewer>
+    </div>
+  </div>
+</ng-template>

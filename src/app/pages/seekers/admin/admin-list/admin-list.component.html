@@ -1,0 +1,97 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5 class="card-title">Skill Seekers</h5>
+      <button class="btn btn-with-icon btn-primary right" (click)="add()">
+        <i class="fa fa-plus"></i> Add New
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card" *ngFor="let n of (seekers$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-1 col-lg-2 col-md-2 col-12">
+            <div class="fxg">
+              <h6>Seeker ID</h6>
+              <p>{{n?.id}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <h6>Business Name</h6>
+              <p>{{n?.skillSeekerName}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <h6>Contact Person</h6>
+              <p>{{n?.primaryContactFullName}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <h6>Contact Details</h6>
+              <div class="d-flex align-items-center h-100">
+                <h5 class="mb-0">
+                  <span>
+                    <a class="txt primary-dark" [title]="n?.email" data-toggle="tooltip" data-placement="top"
+                      [href]="n?.email ? 'mailto:' + n?.email : 'javascript:void(0)'">
+                      <i class="fa fa-envelope fs-20 primary-dark txt"></i>
+                    </a>
+                  </span>
+                  &nbsp;&nbsp;
+                  <span>
+                    <a [title]="n?.phone" data-toggle="tooltip" data-placement="top"
+                      [href]="n?.phone ? 'tel:' + n?.phone : 'javascript:void(0)'">
+                      <i class="fa fa-phone-alt fs-20 primary-dark txt"></i>
+                    </a>
+                  </span>
+                  &nbsp;&nbsp;
+                  <span>
+                    <a [title]="n?.location" data-toggle="tooltip" data-placement="top" [href]="'javascript:void(0)'">
+                      <i class="fa fa-location-arrow fs-20 primary-dark txt"></i>
+                    </a>
+                  </span>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <h6>Start Date</h6>
+              <p>{{n?.startDate | date : 'MM/dd/yyyy'}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <h6>Status</h6>
+              <div class="align-items-center d-flex h-100">
+                <p class="mb-0 badge cell" [ngClass]="n?.status === 'Active' ? 'success' : 'danger'">
+                  {{n?.status === 'Active' ? 'Active' : 'In-active'}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-1 col-lg-2 col-md-2 col-12">
+            <div class="fxg">
+              <h6>Actions</h6>
+              <div class="h-100 d-flex align-items-center">
+                <button class="btn btn-icon" (click)="navigate(n, 'preview')">
+                  <i class="fa fa-eye"></i>
+                </button>
+                <button class="btn btn-icon" (click)="navigate(n, 'edit')">
+                  <i class="fa fa-pen"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fxg" [class.d-none]="(seekers$ | async)?.length === 0">
+      <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+        [pageSizeOptions]="pageOptions.sizeOptions" (page)="pageChange($event)" class="size-none">
+      </mat-paginator>
+    </div>
+  </div>

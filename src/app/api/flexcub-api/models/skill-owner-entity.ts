@@ -1,0 +1,54 @@
+/* tslint:disable */
+/* eslint-disable */
+import { OwnerSkillStatusEntity } from './owner-skill-status-entity';
+import { SkillOwnerGenderEntity } from './skill-owner-gender-entity';
+import { SkillOwnerMaritalStatusEntity } from './skill-owner-marital-status-entity';
+import { SkillOwnerPortfolio } from './skill-owner-portfolio';
+import { SkillPartnerEntity } from './skill-partner-entity';
+import { VisaEntity } from './visa-entity';
+export interface SkillOwnerEntity {
+  aboutMe?: string;
+  accountStatus?: boolean;
+  address?: string;
+  alternateEmail?: string;
+  alternatePhoneNumber?: string;
+  changedAt?: string;
+  changedBy?: number;
+  city?: string;
+  createdAt?: string;
+  createdBy?: number;
+  deletedAt?: string;
+  dob?: string;
+  endDate?: string;
+  expMonths?: number;
+  expYears?: number;
+  federalSecurityClearance?: boolean;
+  firstName?: string;
+  gender?: SkillOwnerGenderEntity;
+  imageAvailable?: boolean;
+  lastName?: string;
+  linkedIn?: string;
+  maritalStatus?: SkillOwnerMaritalStatusEntity;
+  onBoardingDate?: string;
+  ownerSkillStatusEntity?: OwnerSkillStatusEntity;
+  permanentAddress?: string;
+  permanentCity?: string;
+  permanentState?: string;
+  phoneNumber?: string;
+  portfolioUrl?: Array<SkillOwnerPortfolio>;
+  primaryEmail: string;
+  rateCard?: number;
+  resumeAvailable?: boolean;
+  skillOwnerEntityId?: number;
+  skillPartnerEntity?: SkillPartnerEntity;
+  ssn?: string;
+  startDate?: string;
+  state?: string;
+  status?: string;
+  statusVisa?: string;
+  usAuthorization?: boolean;
+  usc?: boolean;
+  visaEndDate?: string;
+  visaStartDate?: string;
+  visaStatus?: VisaEntity;
+}

@@ -1,0 +1,48 @@
+<ng-container [ngTemplateOutlet]="landingTemplate" *ngIf="_selection === ''"></ng-container>
+
+<ng-template #landingTemplate>
+  <div class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-12 col-lg-10 offset-lg-1">
+          <div class="card animate__animated animate__fadeInLeft fx-shadow">
+            <div class="row no-gutters">
+              <div class="col-12 col-md-5 fadeInUp d-none d-md-block">
+                <img src="assets/images/login-bg.png" alt="login" class="card-img h-100" />
+              </div>
+              <div class="col-12 col-md-7 text-sm-center text-center txt-lg-left  fadeInUp">
+                <div class="p-4 py-5">
+                  <div class="mb-4">
+                    <div class="logo mb-4">
+                      <img src="assets/images/logo-flexcub.svg" alt="logo" class="logo" />
+                    </div>
+                    <h2 class="txt primary-dark bolder mb-3">Join Us!</h2>
+                    <p class="txt mb-1">To begin this journey, pick an option that best describes you!</p>
+                  </div>
+                  <div class="pe-xl-5">
+                    <div class="mb-4" (click)="selection('seeker')">
+                      <div class="sudo"></div>
+                    </div>
+                    <div class="mb-4" (click)="selection('partner')">
+                      <div class="sudo1"></div>
+                    </div>
+                    <div class="mb-3">
+                      <p class="txt">Already have an account?&nbsp;
+                        <a href="javascript:void(0)" routerLink="/login"
+                          class="bold primary text-decoration-underline txt fs-14">Sign In</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-owner *ngIf="_selection === 'owner'"></app-owner>
+<app-seeker *ngIf="_selection === 'seeker'"></app-seeker>
+<app-partner *ngIf="_selection === 'partner'"></app-partner>

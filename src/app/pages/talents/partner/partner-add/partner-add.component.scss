@@ -1,0 +1,19 @@
+.fx-bg {
+  background-color: #f5f9ff;
+}
+
+.href {
+  text-decoration: underline;
+}
+
+.instructions {
+  font-size: 12px;
+  color: var(--default-text);
+  ul {
+    padding-left: 12px;
+    > li {
+      font-size: 12px;
+      color: var(--default-text);
+    }
+  }
+}

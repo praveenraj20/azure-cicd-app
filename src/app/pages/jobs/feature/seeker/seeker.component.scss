@@ -1,0 +1,14 @@
+@import "../../jobs.component.scss";
+
+.my-2r {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 426px) {
+
+  // Align text to center.
+  div.fxg.text-xs-end {
+    text-align: end;
+  } 
+}

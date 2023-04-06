@@ -1,0 +1,162 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">
+      <i title="Go Back" class="fa fa-chevron-left me-2 pointer" aria-hidden="true" routerLink="/jobs"></i>
+      Define selection process
+    </h5>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between mb-4" *ngIf="jobId">
+      <div class="head">
+        <p class="txt mb-1">Create a Selection Process for</p>
+        <p class="txt mb-2 dark bold">{{jobId}}. <span>{{jobTitle}}</span></p>
+      </div>
+      <div>
+        <button class="btn btn-outline-primary" [disabled]="_previousStatus" (click)="previousStatus()">
+          Previous Status</button>
+        <button class="btn btn-outline-primary" (click)="reset()">Reset</button>
+        <button class="btn btn-primary" (click)="publish()">Publish</button>
+      </div>
+    </div>
+    <div class="row" cdkDropListGroup>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3">
+              <h5 class="txt primary-dark bold">Selection Workflow Components</h5>
+              <p class="txt dark bold">Drag and drop the required steps into the right side panel to create the
+                selection workflow.</p>
+            </div>
+
+            <div class="fx-drag-group mb-4">
+              <div class="row g-2" cdkDropList [cdkDropListData]="items" cdkDropListConnectedTo="basket"
+                cdkDropListSortingDisabled (cdkDropListDropped)="drop($event)"
+                [cdkDropListEnterPredicate]="noReturnPredicate">
+                <div class="col-auto" *ngFor="let n of items; index as i" cdkDrag [cdkDragData]="n">
+                  <div class="fx-badge" [style.background-color]="n?.color">
+                    {{ n?.item }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-new">
+              <button class="btn btn-outline-primary btn-with-icon right" *ngIf="_edit" (click)="edit()">
+                <i class="fa fa-plus"></i>Add new
+              </button>
+              <input type="text" class="form-control" *ngIf="!_edit" [(ngModel)]="add"
+                placeholder="Please Enter WorkFlow" (focusout)="onEnter()" (keyup.enter)="onEnter()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-center">
+              <div class="d-block m-auto text-center">
+                <div class="mw-225">
+                  <div cdkDropList [cdkDropListData]="basket" cdkDropListConnectedTo="items"
+                    (cdkDropListDropped)="drop($event)" [cdkDropListEnterPredicate]="allowedPredicate">
+                    <div *ngFor="let n of basket; index as i; let last = last" cdkDrag [cdkDragData]="n">
+                      <div class="fx-badge" [style.background-color]="n?.color">
+                        {{ n?.item }}
+                      </div>
+                      <div *ngIf="!last" class="my-2">
+                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{ display: dialogConfig === 'rateCard' ? 'block' : 'none' }">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h4 class="modal-title txt mb-0 fw-6 dark">Rate Approve</h4>
+        <!-- <button type="button" class="close" (click)="dialogConfig = ''">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3" *ngFor="let n of selection; let i = index">
+          <div class="col-12 col-md-6">
+            <div class="avatar-flex">
+              <a class="avatar md">
+                <img [src]="n?.avatar">
+              </a>
+              <div class="fxg">
+                <p class="txt dark fw-6 mb-0">{{ n?.skillOwnerName }}</p>
+                <p class="txt sm mb-0">{{ n?.jobTitle }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control input-icon" [value]="n.rate" [disabled]="n.msaCreated"
+                placeholder="Rate/hr" (change)="rateEntry($event, n)" (keypress)="onlyPrice($event)" />
+              <label>Rate/hr</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="btn btn-with-icon right" (click)="dialogConfig = 'percentage'">
+            <i class="fa fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" type="button" [disabled]="!_publish"
+            (click)="publish()">
+            Publish
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-backdrop" tabindex="-1" role="dialog"
+  [ngStyle]="{ display: dialogConfig === 'percentage' ? 'block' : 'none' }" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="text-center w-100">
+          <h5 class="txt mb-0 bold primary">Set Minimum %</h5>
+        </div>
+        <button type="button" class="close" (click)="dialogConfig = ''" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row mb-3 align-items-center" *ngFor="let m of _basket; index as i">
+          <div class="col-md-4">
+            <label class="txt">{{ m?.item }}</label>
+          </div>
+          <div class="col-md-8">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <mat-slider color="primary" [max]="100" [min]="0" [thumbLabel]="true" [(ngModel)]="m.value">
+                </mat-slider>
+              </div>
+
+              <div class="col-md-3">
+                <p>{{ m?.value }}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button class="btn btn-primary" (click)="dialogConfig = 'rateCard'">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

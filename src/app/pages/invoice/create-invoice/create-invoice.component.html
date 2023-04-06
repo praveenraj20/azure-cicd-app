@@ -1,0 +1,232 @@
+<main>
+  <div class="card-body auth-body pt-1">
+    <ng-container [ngTemplateOutlet]="first" *ngIf="step === 1"></ng-container>
+    <ng-container [ngTemplateOutlet]="second" *ngIf="step === 2"></ng-container>
+    <ng-container [ngTemplateOutlet]="third" *ngIf="step === 3"></ng-container>
+  </div>
+</main>
+
+<ng-template #first>
+  <div class="card">
+    <div class="card-header bg-white">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title txt bold mb-2 mt-2" routerLink="/invoice">
+            <i title="Go Back" aria-hidden="true" class="fa fa-chevron-left mx-2"></i>
+            Create Invoice
+          </h5>
+          <a class="text-danger txt bold" routerLink="/invoice">Cancel</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body mb-5 mt-3 pb-5 pt-4">
+      <form [formGroup]="clientForm">
+        <div class="d-flex flex-column justify-content-center">
+          <h3 class="text-center">Create invoice for the respective project</h3>
+          <div class="form-group offset-md-4 col-md-4">
+            <div class="form-group form-floating mb-3">
+              <select class="form-control form-control-lg form-select" formControlName="client"
+                (change)="onChangeClient()">
+                <option hidden selected value="">Client*</option>
+                <option *ngFor="let item of listOfClient" [ngValue]="item">
+                  {{ item.skillSeekerName }}
+                </option>
+              </select>
+              <label>Client*</label>
+            </div>
+            <div class="form-group form-floating mb-3">
+              <select class="form-control form-control-lg form-select" formControlName="project"
+                (change)="onChangeProject()">
+                <option hidden selected value="">Project*</option>
+                <option *ngFor="let item of listOfProject" [ngValue]="item">
+                  {{ item.projectName }}
+                </option>
+              </select>
+              <label>Project*</label>
+            </div>
+          </div>
+
+          <div class="mt-5 d-flex justify-content-center">
+            <button type="submit" [disabled]="!clientForm.valid" (click)="next(2)"
+              class="btn btn-primary w-30 mb-2 py-2">Next
+              -></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #second>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Create Invoice</h5>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">Resources</h5>
+        <button class="btn btn-primary" [disabled]="array.length == 0" (click)="next(3)">
+          Generate Invoice</button>
+      </div>
+      <div class="card" *ngFor="let list of partnerInfo">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-1">
+              <input type="checkbox" (change)="getAnswers(list,$event)" checked="{{list.checked}}"
+                [id]="list.ownerId" />
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3 d-flex align-items-center">
+              <div>
+                <img class="avatar" />
+              </div>
+              <div>
+                <p class="mb-0">Name</p>
+                <h5 class="mb-0">{{ list?.ownerName }}</h5>
+              </div>
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3 col-xs-3">
+              <p class="mb-0">Position</p>
+              <h5 class="mb-0">{{ list?.position }}</h5>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+              <p class="mb-0">Client</p>
+              <h5 class="mb-0">{{ list?.client }}</h5>
+            </div>
+
+            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-xs-1">
+              <p class="mb-0">Timesheet</p>
+              <button class="btn btn-icon me-2" (click)="openView(list)">
+                <i class="fa fa-eye"></i>
+              </button>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-3">
+              <p class="mb-0">Total Hours</p>
+              <h5 class="mb-0">{{ list?.totalHours }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #third>
+  <div class="card" #screen>
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5>Invoice Preview</h5>
+        <div>
+          <button class="btn btn-outline-primary" (click)="send()">Submit</button>
+          <button class="btn btn-outline-primary" (click)="download()">Download</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row mb-5 mt-5 pb-5 pt-5">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+          <div class="d-flex justify-content-between">
+            <div class="flex-img">
+              <img alt="logo" src="assets/logo/flexcub-logo-revised.svg" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+          <div class="card">
+            <div class="mb-3 px-2">
+              <label class="py-2">Current Date</label>
+              <div class="">{{ today | date : 'MM/dd/yyyy' }}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 px-2">
+                <label class="py-2">Due Date</label>
+                <div class=""></div>
+              </div>
+              <div class="mb-3 px-2">
+                <label class="py-2">Amount</label>
+                <div class="txt primary">${{ finalAmt }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row border-content">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+              <label>From,</label>
+              <div>{{ seekerName }}</div>
+            </div>
+            <div class="">
+              <label>Project ID</label>
+              <div>{{ this.clientForm.value.project.projectId }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <div class="mx-3">
+            <label>Project Name</label>
+            <div>{{ this.clientForm.value.project.projectName }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-lg-12 col-md-12 col-sm-12 p-4">
+          <div class="table-responsive table-borderless">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th>Client Name - Position</th>
+                  <th>Resource Name</th>
+                  <th>Total Hours</th>
+                  <th>Rates</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let lists of array; let i = index">
+                <tr>
+                  <td scope="col">{{ i + 1 }}</td>
+                  <td>{{ lists?.client }}-{{ lists?.position }}</td>
+                  <td>{{ lists?.ownerName }}</td>
+                  <td>{{ lists?.totalHours }}</td>
+                  <td>$ {{ lists?.rateCard }}</td>
+                  <td>$ {{ lists?.amount }}</td>
+                  <td>
+                    <div class="d-flex">
+                      <div class="px-2" (click)="openView(lists)">
+                        <i class="fa fa-eye"></i>
+                      </div>
+                      <div class="px-2" *ngIf="lists.path!==''">
+                        <span class="px-3">
+                          <a [href]="lists.path ? lists.path : 'javascript:void(0)'">
+                            <i class="fa fa-download" aria-hidden="true"> </i>
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-5">
+        <div>{{ finalCount }} Item</div>
+        <div>Total Work Hours :{{ finalHours }}</div>
+        <div class="txt primary">Amount Payable : ${{ finalAmt }} </div>
+      </div>
+      <div id="download">
+        <div #canvas></div>
+        <a #downloadLink></a>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-timesheet-details
+  *ngIf="_view"
+  [selectedWeek]="startDate"
+  [id]="$any(ownerInfo)?.ownerId"
+  (close)="closeView()"></app-timesheet-details>

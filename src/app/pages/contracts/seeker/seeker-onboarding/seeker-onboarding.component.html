@@ -1,0 +1,87 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center">
+      <button class="btn me-2 p-0" routerLink="/contracts">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <h5 class="card-title">Onboard</h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row my-4">
+      <div class="text-center mb-3">
+        <h2 class="txt bolder primary-dark">Onboard the candidate into the respective project</h2>
+      </div>
+      <div class="col-12 col-md-8 col-lg-6 col-xl-4 offset-md-2 offset-lg-3 offset-xl-4">
+        <form class="form mb-3" [formGroup]="form">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="Candidate Name" formControlName="name"
+              [ngClass]="{ 'is-invalid': f?.name?.touched && f?.name?.errors }" />
+            <label>Candidate Name*</label>
+
+            <div *ngIf="f?.name?.touched && f?.name?.errors" class="invalid-feedback">
+              <div *ngIf="f.name?.errors?.required">Candidate name is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" placeholder="Project" formControlName="projectName"
+              [ngClass]="{ 'is-invalid': f?.projectName?.touched && f?.projectName?.errors }" />
+            <label>Project*</label>
+
+            <div *ngIf="f?.projectName?.touched && f?.projectName?.errors" class="invalid-feedback">
+              <div *ngIf="f.projectName?.errors?.required">Project is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <select class="form-select" formControlName="status"
+              [ngClass]="{ 'is-invalid': f?.status?.touched && f?.status?.errors }">
+              <option [value]="null" hidden>Status*</option>
+              <option [value]="n?.label" *ngFor="let n of status" [hidden]="n?.hidden">{{n?.label}}</option>
+            </select>
+            <label>Status*</label>
+
+            <div *ngIf="f?.status?.touched && f?.status?.errors" class="invalid-feedback">
+              <div *ngIf="f.status?.errors?.required">Status is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3 fr-input-group">
+            <input type="text" class="form-control" readonly bsDatepicker #d1="bsDatepicker" placeholder="mm/dd/yyyy"
+              [bsConfig]="bsConfig" [minDate]="date" [daysDisabled]="[6, 0]" formControlName="startDate"
+              [ngClass]="{ 'is-invalid me-bg': f?.startDate?.touched && f?.startDate?.errors }" />
+            <label>Start Date</label>
+            <button class="btn ico" (click)="d1?.toggle()">
+              <i class="fa fa-calendar primary-dark txt"> </i>
+            </button>
+
+            <div *ngIf="f?.startDate?.touched && f?.startDate?.errors" class="invalid-feedback">
+              <div *ngIf="f.startDate?.errors?.required">Start Date is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3 fr-input-group">
+            <input type="text" class="form-control" readonly bsDatepicker #d2="bsDatepicker" placeholder="mm/dd/yyyy"
+              [bsConfig]="bsConfig" [minDate]="date" [daysDisabled]="[6, 0]" formControlName="endDate"
+              [ngClass]="{ 'is-invalid me-bg': f?.endDate?.touched && f?.endDate?.errors }" />
+            <label>End Date</label>
+            <button class="btn ico" (click)="d2?.toggle()">
+              <i class="fa fa-calendar primary-dark txt"> </i>
+            </button>
+
+            <div *ngIf="f?.endDate?.touched && f?.endDate?.errors" class="invalid-feedback">
+              <div *ngIf="f.endDate?.errors?.required">End Date is required</div>
+              <div *ngIf="f.endDate?.errors?.invalidSelection">End date should be greater than start date.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="w-100 text-center">
+      <button class="btn btn-primary" type="submit" [disabled]="!form?.valid" (click)="submit()">Submit</button>
+    </div>
+  </div>
+</div>

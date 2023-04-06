@@ -1,0 +1,149 @@
+@import "../../../../timesheet/timesheet.component.scss";
+$border-color: #dfdede;
+
+@media (min-width: 767px) {
+  .fx-row {
+    > [class*="col-"] {
+      border-right: 1px solid $border-color;
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}
+
+.fx-row {
+  > [class*="col-"] {
+    min-height: 375px;
+    max-height: 475px;
+    overflow-y: auto;
+  }
+}
+
+.nav-pills {
+  > .nav-link {
+    border: 1px solid $border-color;
+    color: var(--default-text);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    &.active {
+      border: 1px solid var(--primary-hex);
+      background-color: rgba(var(--primary), $alpha: 0.05);
+      color: var(--primary-hex);
+    }
+    &.fx-flat {
+      background-color: rgba(var(--primary), $alpha: 0.05);
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.idle {
+  border: 1px solid #eaecef;
+  border-radius: 8px;
+  &.primary {
+    background-color: rgba(var(--primary), 0.2);
+  }
+  &.grey {
+    background-color: #eaecef;
+  }
+}
+
+.mxw-7x {
+  max-width: 70px;
+  margin: auto;
+  text-align: center;
+}
+
+.a-crawl {
+  text-decoration: underline;
+  &.danger {
+    color: #db3236;
+    &:hover {
+      color: #db3236;
+    }
+  }
+}
+
+.fa-outline {
+  padding: 1rem;
+  border-radius: 50%;
+  border: 3px solid;
+  &.success {
+    border-color: #3cba54;
+    color: #3cba54;
+  }
+}
+
+.rightx.nxt-3 > .modal-dialog {
+  min-width: 1000px;
+  max-width: 425px;
+}
+
+.project-week{
+  font-weight: 500;
+  font-size: 14px;
+  color: #333333;
+  margin-left: 68px;
+}
+
+
+.input-group-prepend,
+.input-group-append {
+  > .input-group-text {
+    font-size: 1.25rem;
+    padding: 0.85rem;
+    color: var(--primary-hex);
+    > .fa {
+      color: var(--primary-hex);
+    }
+    &.pointer {
+      cursor: pointer;
+    }
+  }
+}
+
+.input-group-prepend {
+  > .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.input-group-append {
+  > .input-group-text {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.5rem;
+}
+
+.table td {
+  border: 0;
+  height: auto;
+  p {
+    line-height: 1.4;
+  }
+}
+.project-week{
+  font-weight: 500;
+  font-size: 14px;
+  color: #333333;
+  margin-left: 60px;
+}
+
+.fx-files {
+  margin-bottom: 1rem;
+  &:first-child {
+    margin-top: 1rem;
+  }
+}
+
+
+
+

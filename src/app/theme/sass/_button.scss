@@ -1,0 +1,159 @@
+button {
+  &.btn {
+    font-weight: 600;
+    cursor: pointer;
+    &:focus,
+    &.focus,
+    &.active:focus,
+    &:active:focus,
+    &.active.focus {
+      outline: none;
+    }
+    &:disabled,
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+  &.fxc-lg {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+  }
+}
+
+@mixin styleButton($color, $borderColor) {
+  background: $color;
+  border-color: $borderColor;
+}
+
+@mixin buttonColor($color, $borderColor) {
+  @include styleButton($color, $borderColor);
+}
+
+@mixin buttonFocus($color) {
+  background-color: $color;
+  box-shadow: none;
+}
+
+button.btn.btn-primary {
+  @include buttonColor(var(--primary-hex), var(--primary-hex));
+  &:not(:disabled),
+  &:not(.disabled) {
+    &:active,
+    &.active,
+    &.target,
+    &:target {
+      @include styleButton(var(--primary-hex), var(--primary-hex));
+      &:focus {
+        @include buttonFocus(var(--primary-hex));
+      }
+    }
+  }
+  &:focus {
+    @include buttonFocus(var(--primary-hex));
+  }
+}
+
+button.btn.btn-primary.dark {
+  @include buttonColor(var(--primary-hex-dark), var(--primary-hex-dark));
+  &:not(:disabled),
+  &:not(.disabled) {
+    &:active,
+    &.active,
+    &.target,
+    &:target {
+      @include styleButton(var(--primary-hex-dark), var(--primary-hex-dark));
+      &:focus {
+        @include buttonFocus(var(--primary-hex-dark));
+      }
+    }
+  }
+  &:focus {
+    @include buttonFocus(var(--primary-hex-dark));
+  }
+}
+
+button.btn.btn-link {
+  color: var(--primary-hex);
+  &:active,
+  &.active,
+  &.target,
+  &:target {
+    color: var(--primary-hex);
+  }
+  &.secondary {
+    color: var(--default-text);
+    &:active,
+    &.active,
+    &.target,
+    &:target {
+      color: var(--default-text);
+    }
+  }
+}
+
+button.btn.btn-outline-primary {
+  color: var(--primary-hex);
+  @include styleButton(var(--background), var(--primary-hex));
+  &:not(:disabled),
+  &:not(.disabled) {
+    &:active,
+    &.active,
+    &.target,
+    &:target {
+      @include styleButton(var(--background), var(--primary-hex));
+      &:focus {
+        @include styleButton(var(--primary-hex), var(--background));
+        color: var(--background);
+      }
+    }
+  }
+  &:hover {
+    @include styleButton(var(--primary-hex), var(--background));
+    color: var(--background);
+  }
+  &:focus {
+    @include styleButton(var(--primary-hex), var(--background));
+    color: var(--background);
+  }
+}
+
+.btn-grey {
+  background-color: #eaeef1;
+  &:hover {
+    background-color: #eaeef1;
+  }
+  &:disabled {
+    background-color: #eaeef1;
+    border: 0;
+  }
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  padding: 0;
+}
+
+.btn-with-icon {
+  &.right i {
+    margin-right: 10px;
+  }
+  &.left i {
+    margin-left: 10px;
+  }
+}
+
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-menu {
+  &.show {
+    border-width: 0;
+    box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
+  }
+}

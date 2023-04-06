@@ -1,0 +1,82 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5 class="card-title">Skill Partners</h5>
+      <!-- <button class="btn btn-with-icon btn-primary right" (click)="add()">
+          <i class="fa fa-plus"></i> Add New
+        </button> -->
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card" *ngFor="let n of (partner$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-2 col-sm-6 col-lg-2 col-md-6 col-6">
+            <div class="fxg">
+              <h6>Partner ID</h6>
+              <p>{{n?.id}}</p>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 col-lg-3 col-md-6 col-6">
+            <div class="fxg">
+              <h6>Business Name</h6>
+              <p>{{n?.businessName}}</p>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 col-lg-3 col-md-6 col-12">
+            <div class="fxg">
+              <h6>Contact Person</h6>
+              <p>{{n?.fullName}}</p>
+            </div>
+          </div>
+          <div class="col-xl-2 col-sm-6 col-lg-2 col-md-6 col-6">
+            <div class="fxg">
+              <div class="col">
+                <div class="d-flex align-items-center h-100">
+                  <h5 class="mb-0">
+                    <span>
+                      <a class="txt primary-dark" [title]="n?.email" data-toggle="tooltip" data-placement="top"
+                        [href]="n?.email ? 'mailto:' + n?.email : 'javascript:void(0)'">
+                        <i class="fa fa-envelope fs-20 primary-dark txt"></i>
+                      </a>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <a [title]="n?.phone" data-toggle="tooltip" data-placement="top"
+                        [href]="n?.phone ? 'tel:' + n?.phone : 'javascript:void(0)'">
+                        <i class="fa fa-phone-alt fs-20 primary-dark txt"></i>
+                      </a>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <a [title]="n?.location" data-toggle="tooltip" data-placement="top" [href]="'javascript:void(0)'">
+                        <i class="fa fa-location-arrow fs-20 primary-dark txt"></i>
+                      </a>
+                    </span>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-2 col-sm-6 col-lg-2 col-md-6 col-6">
+            <div class="fxg">
+              <h6>Actions</h6>
+              <div class="h-100 d-flex align-items-center">
+                <button class="btn btn-icon" (click)="navigate(n, 'preview')">
+                  <i class="fa fa-eye"></i>
+                </button>
+                <button class="btn btn-icon" (click)="navigate(n, 'edit')">
+                  <i class="fa fa-pen"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fxg" [class.d-none]="(partner$ | async)?.length === 0">
+      <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+        [pageSizeOptions]="pageOptions.sizeOptions" (page)="pageChange($event)" class="size-none">
+      </mat-paginator>
+    </div>
+  </div>

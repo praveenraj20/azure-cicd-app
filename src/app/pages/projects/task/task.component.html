@@ -1,0 +1,138 @@
+<div class="card">
+    <div class="col-md-12 card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0" routerLink="/projects">
+            <i class="fa fa-chevron-left mx-2"></i>Create task
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card-body mb-5 mt-3 pb-5 pt-4">
+                <div [formGroup]="taskForm">
+                    <div class="row d-flex flex-column justify-content-center">
+                        <div class="row d-flex flex-column justify-content-center">
+                            <h3 class="txt primary-dark">Create Tasks</h3>
+                            <div class="offset-md-1 col-md-10">
+                                <div class="form-floating mt-3">
+                                    <select class="form-control" formControlName="ProjectDepartment1">
+                                        <option *ngFor="let project of projectName" [ngValue]="project">
+                                            {{ project.title }}
+                                        </option>
+                                    </select>
+                                    <label>Project *</label>
+                                </div>
+                                <div class="form-floating mt-3">
+                                    <input type="text" class="form-control" placeholder="Task Title"
+                                        formControlName="TaskTitle" />
+                                    <label for="title">Task Title *</label>
+                                </div>
+                                <div class="form-floating area mt-3">
+                                    <textarea type="text" class="form-control" placeholder="Task Description"
+                                        formControlName="taskDescription"></textarea>
+                                    <label for="project">Task Description *</label>
+                                </div>
+                            </div>
+                            <div class="mt-5 d-flex justify-content-center">
+                                <button [disabled]="!this.taskForm.valid" class="btn btn-primary"
+                                    (click)="createTask()">Create -></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mt-5 txt primary-dark">Tasks List</h3>
+            <div class="card m-3 taskcard">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="row">
+                            <div *ngIf="projectTitle">
+                                <div class="card-body row justify-content-between align-items-center">
+                                    <div *ngIf="projectTitle">
+                                        <th class="col">
+                                            <h4 class="text-primary">{{ projectTitle }}</h4>
+                                            <span>{{ projectDesc }}</span>
+                                        </th>
+                                        <hr />
+                                    </div>
+                                    <div *ngIf="taskinfo?.length! > 0" class="taskcontainer">
+                                        <div *ngFor="let item of taskinfo">
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <div class="row">
+                                                        <td class="col-2">
+                                                            <p>Task Id</p>
+                                                            <h3 class="text-success">{{ item.taskId }}</h3>
+                                                        </td>
+                                                        <td class="col-3">
+                                                            <p>Task Title</p>
+                                                            <h4 class="text-primary">{{ item.taskTitle }}</h4>
+                                                        </td>
+                                                        <td class="col-7">
+                                                            <p>Task Description</p>
+                                                            <p>{{ item.taskDescription }}</p>
+                                                        </td>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <td>
+                                                        <div class="d-flex align-items-center mt-2">
+                                                            <i class="fa fa-pencil mx-2" style='color: royalblue'
+                                                                aria-hidden="true" (click)="open(item)"></i>
+                                                            <i class='fa fa-trash' style='color: red' aria-hidden="true"
+                                                                (click)="deleteTask(item?.taskId!)"></i>
+                                                        </div>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" [ngStyle]="{ display: dialogConfig === 'rateCard' ? 'block' : 'none' }">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h4 class="modal-title txt mb-0 fw-6 dark">Update Task</h4>
+                <button type="button" class="close" (click)="dialogConfig = ''">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mt-4">
+                    <form [formGroup]="updatetaskForm">
+                        <div class="row client-form d-flex flex-column justify-content-center">
+                            <div class="row client-form d-flex flex-column justify-content-center">
+                                <div class="offset-md-3 col-md-6">
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" placeholder="Task Title"
+                                            name="TaskTitle" formControlName="TaskTitle" />
+                                        <label for="title">Task Title *</label>
+                                    </div>
+                                    <div class="form-floating area mt-3">
+                                        <textarea type="text" class="form-control"
+                                            placeholder="Project Description" name="projectdescription"
+                                            formControlName="taskDescription"></textarea>
+                                        <label for="project">Task Description *</label>
+                                    </div>
+                                </div>
+                                <div class="card-footer create-new-footer mt-5 d-flex justify-content-center">
+                                    <button [disabled]="!this.updatetaskForm.valid" class="btn btn-primary"
+                                        (click)="updateTask()">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

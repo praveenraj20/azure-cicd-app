@@ -1,0 +1,203 @@
+<div class="card">
+  <div class="card-header">
+    <div class="h5 card-title">
+      <i title="Go Back" class="fa fa-chevron-left me-2 pointer" aria-hidden="true" routerLink="/jobs"></i>
+      Talent(s) Recommendations
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="head mb-4" *ngIf="jobId">
+      <p class="txt mb-1">Recommended Talents list for</p>
+      <p class="txt mb-2 dark bold">{{jobId}}. <span>{{jobTitle}}</span></p>
+    </div>
+
+    <div class="card" *ngFor="let n of (suggestions$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
+            <div class="avatar-flex">
+              <div class="fxg me-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [id]="n.skillOwnerId"
+                    [checked]="n?.checked ? n?.checked : false" (change)="checkSuggestion(n, $event, i)">
+                </div>
+              </div>
+              <a class="avatar md">
+                <img [src]="n?.avatar">
+              </a>
+              <div class="fxg">
+                <h5 class="txt dark bold mb-1">{{n?.skillOwnerName}}</h5>
+                <p class="txt sm mb-0">{{n?.skillOwnerExperience}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
+            <div class="d-flex align-items-center">
+              <div class="mx-2">
+                <div class="d-block text-center position-relative">
+                  <div class="align-items-center d-flex h-100 justify-content-center mb-1">
+                    <p class="txt sm dark mb-0 position-absolute fs-11">
+                      {{n?.skillSetMatchPercentage ? n?.skillSetMatchPercentage : 0}}%</p>
+                    <mat-progress-spinner class="fx-progress-c" color="primary" mode="determinate"
+                      [value]="n?.skillSetMatchPercentage"></mat-progress-spinner>
+                  </div>
+                  <p class="txt mb-0 fs-12">Skillset</p>
+                </div>
+              </div>
+              <div class="mx-2">
+                <div class="d-block text-center position-relative">
+                  <div class="align-items-center d-flex h-100 justify-content-center mb-1">
+                    <p class="txt sm dark mb-0 position-absolute fs-11">
+                      {{n?.locationMatchPercentage ? n?.locationMatchPercentage : 0}}%</p>
+                    <mat-progress-spinner class="fx-progress-c" color="primary" mode="determinate"
+                      [value]="n?.locationMatchPercentage"></mat-progress-spinner>
+                  </div>
+                  <p class="txt mb-0 fs-12">Location</p>
+                </div>
+              </div>
+              <div class="mx-2">
+                <div class="d-block text-center position-relative">
+                  <div class="align-items-center d-flex h-100 justify-content-center mb-1">
+                    <p class="txt sm dark mb-0 position-absolute fs-11">
+                      {{n?.rateMatchPercentage ? n?.rateMatchPercentage : 0}}%</p>
+                    <mat-progress-spinner class="fx-progress-c" color="primary" mode="determinate"
+                      [value]="n?.rateMatchPercentage"></mat-progress-spinner>
+                  </div>
+                  <p class="txt mb-0 fs-12">Rate</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
+            <div class="d-flex align-items-center ">
+              <div class="d-block text-center me-3">
+                <i class="fa-2x fa-shield-check fal mb-1 txt" [class.text-success]="n?.verified"></i>
+                <p class="txt mb-0 sm">Verified</p>
+              </div>
+              <div class="d-block text-center mx-3 ">
+                <i class="fa-2x fa-check-circle fal mb-1 txt" [class.text-success]="n?.preScreen"></i>
+                <p class="txt mb-0 sm">Pre-screen</p>
+              </div>
+              <div class="d-block text-center ">
+                <h5 class="txt dark bold mb-2 mt-2">{{n?.overallMatchPercentage}}</h5>
+                <p class="txt sm mb-0 mt-2">Overall match</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-xl-1 col-lg-4 col-md-6 col-6 mb-3 mb-xl-0">
+            <div class="text-center">
+              <h5 class="txt dark bold mb-1">{{n?.overallMatchPercentage}}</h5>
+              <p class="txt sm mb-0">Overall match</p>
+            </div>
+          </div> -->
+
+          <div class="col-xl-2 col-lg-4 col-md-6 col-6 mb-3 mb-xl-0 text-center">
+            <div class="fxg">
+              <h5 class="mb-0">
+                <span>
+                  <a class="txt primary-dark"
+                    [href]="n?.skillOwnerEmailAddress ? 'mailto:' + n?.skillOwnerEmailAddress : 'javascript:void(0)'">
+                    <i class="fa fa-envelope fs-20 primary-dark txt"></i>
+                  </a>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <a [href]="n?.skillOwnerContact ? 'tel:' + n?.skillOwnerContact : 'javascript:void(0)'">
+                    <i class="fa fa-phone-alt fs-20 primary-dark txt"></i>
+                  </a>
+                </span>
+                &nbsp;&nbsp;
+                <a [href]="n?.resumeAvailable ? n?.resumeUrl: 'javascript:void(0)'">
+                  <i class="fa fs-20 primary-dark txt" [ngClass]="n?.resumeAvailable ? 'fa-eye' : 'fa-eye-slash'"></i>
+                </a>
+              </h5>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-4 col-md-6 col-6 mb-3 mb-xl-0 d-flex">
+            <button class="btn btn-outline-success btn-rounded" *ngIf="n?.shortlist"
+              (click)="shortListing(n, false, i)">Shortlisted</button>
+            <button class="btn btn-outline-primary btn-rounded" *ngIf="!n?.shortlist"
+              (click)="shortListing(n, true, i)">Shortlist</button>
+            &nbsp;&nbsp;
+            <div class="btn-group" dropdown placement="bottom right" container="body">
+              <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                <i class="fa fa-ellipsis-v"></i>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mt-1">
+                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Delete</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fxg" [class.d-none]="(suggestions$ | async)?.length === 0">
+      <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+        [pageSizeOptions]="pageOptions.sizeOptions" (page)="pageChange($event)" class="size-none">
+      </mat-paginator>
+    </div>
+
+    <div class="text-center p-4" *ngIf="(suggestions$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any recommendations.</h6>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="w-100 text-center">
+      <button class="btn btn-primary btn-with-icon left" [disabled]="suggested.length === 0"
+        (click)="defineSelection()">
+        Define Selection Process <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{ display: dialogConfig === 'rateCard' ? 'block' : 'none' }">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h4 class="modal-title txt mb-0 fw-6 dark">Rate Approve</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngFor="let n of candidates; let i = index">
+          <div class="col-12 col-md-6">
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="avatar-flex me-2">
+                  <a class="avatar md">
+                    <img [src]="n?.avatar">
+                  </a>
+                </div>
+                <div class="acg">
+                  <p class="txt dark fw-6 mb-0">{{ n?.skillOwnerName }}</p>
+                  <p class="txt sm mb-0">{{ n?.jobTitle }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6" style="display: flex">
+            <div class="form-floating fr-input-group">
+              <input type="text" class="form-control" [value]="n.rate" [disabled]="n.msaCreated" placeholder="Rate/hr"
+                (change)="rateEntry($event, n)" (keypress)="onlyPrice($event)" />
+              <label>Rate/hr</label>
+
+              <button class="btn ico ne">
+                <i class="fa fa-dollar-sign primary-dark txt"> </i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" type="button" [disabled]="!_publish"
+            (click)="publish()"> Publish </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

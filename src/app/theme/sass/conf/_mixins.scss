@@ -1,0 +1,30 @@
+@mixin scrollBar($size, $thumb, $track) {
+  ::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $thumb;
+    cursor: pointer;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $track; /* $background-color; */
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $thumb;
+    scrollbar-track-color: $thumb;
+  }
+}
+
+@mixin scrollNone() {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  &::-webkit-scrollbar {
+    /* WebKit */
+    display: none;
+  }
+}

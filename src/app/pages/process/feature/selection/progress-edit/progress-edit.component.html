@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-between mb-3">
+  <div class="avatar-flex mb-4">
+    <a class="avatar md">
+      <img [src]="selection?.avatar">
+    </a>
+    <div class="position-relative mw-225">
+      <h5 class="txt mb-1 bold fs-16 primary-dark text-truncate">{{selection?.skillOwnerName}}</h5>
+      <p class="txt sm mb-0">Experience: {{selection?.experience}}</p>
+    </div>
+  </div>
+  <div class="fxg">
+    <button class="btn btn-primary" [disabled]="!form?.valid" (click)="updateProcess()">Save</button>
+  </div>
+</div>
+
+<h5 class="txt bold primary mb-2">Update any Particular Round</h5>
+
+<form class="form mb-3" [formGroup]="form">
+  <div class="form-floating mb-3">
+    <select class="form-select" formControlName="stage" (change)="stageSelection($event)">
+      <option [value]="null" hidden>Select stage</option>
+      <option [value]="n" *ngFor="let n of stages">{{n}}</option>
+    </select>
+    <label>Stage</label>
+  </div>
+
+  <div class="form-floating mb-3 fr-input-group">
+    <input type="text" class="form-control" readonly bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig"
+      [minDate]="date" placeholder="mm/dd/yyyy" [daysDisabled]="[6, 0]" formControlName="dateOfInterview"
+      (onHidden)="dateHandler(1)" />
+    <label>Date of Interview</label>
+    <button class="btn ico" (click)="dp?.toggle()">
+      <i class="fa fa-calendar primary-dark txt"> </i>
+    </button>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12 mb-3">
+      <p class="mb-1 txt">From</p>
+      <timepicker formControlName="timePicker" *ngIf="timePicker" [min]="date" (isValid)="timeIsValid($event)">
+      </timepicker>
+      <timepicker formControlName="timePicker" *ngIf="!timePicker" [min]="minDate" (isValid)="timeIsValid($event)">
+      </timepicker>
+    </div>
+    <div class="col-12">
+      <p class="mb-1 txt">To</p>
+      <timepicker formControlName="_timePicker" [min]="minDate"></timepicker>
+    </div>
+  </div>
+
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" placeholder="Interviewed by" formControlName="interviewedBy" />
+    <label>Interviewed by</label>
+  </div>
+
+  <div class="form-floating mb-3">
+    <select formControlName="ratings" class="form-control form-control-lg form-select">
+      <option hidden selected value="null">Select Rating</option>
+      <option *ngFor="let value of rating_Value" [ngValue]="value">
+        {{value.rate}}
+      </option>
+    </select>
+    <label for="email1">Rate out of 1-10</label>
+  </div>
+
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" placeholder="Feedback" formControlName="feedback" />
+    <label>Feedback</label>
+  </div>
+
+  <div class="form-floating mb-3">
+    <select class="form-select" formControlName="modeOfInterview">
+      <option [value]="null">Mode of Interview</option>
+      <option [value]="n" *ngFor="let n of interviewModes">{{n}}</option>
+    </select>
+    <label>Mode of Interview</label>
+  </div>
+</form>

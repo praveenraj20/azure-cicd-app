@@ -1,0 +1,174 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">
+      <i title="Go Back" class="fa fa-chevron-left me-2 pointer" aria-hidden="true" routerLink="/jobs"></i>
+      View selection progress
+    </h5>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between mb-4" *ngIf="jobId">
+      <div class="head">
+        <p class="txt mb-1">Talent's selection progress for</p>
+        <p class="txt mb-2 dark bold">{{jobId}}. <span>{{jobTitle}}</span></p>
+      </div>
+      <button *ngIf="isLocked" class="btn btn-outline-primary" (click)="updateRequirementPhase()">Update requirement
+        phase</button>
+    </div>
+
+    <div class="card" *ngFor="let n of (candidates$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-3 col-lg-12 col-md-12 col-12 mb-3 mb-xl-0">
+            <div class="avatar-flex">
+              <div class="fxg me-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [id]="n.skillOwnerId">
+                </div>
+              </div>
+              <a class="avatar md">
+                <img [src]="n?.avatar">
+              </a>
+              <div class="fxg">
+                <h5 class="txt dark bold mb-1">{{n?.skillOwnerName}}</h5>
+                <p class="txt sm mb-0">{{n?.experience}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-7 col-lg-12 col-md-12 col-12 scroll">
+            <div class="fx-progress-h" *ngFor="let m of n?.requirementPhaseList; let j = index"
+              [ngClass]="$any(m)?.stage < $any(n)?.currentStage || n?.requirementPhaseList?.length === $any(n)?.stage  ? 'success' : m?.stage === n?.currentStage && n?.requirementPhaseList?.length !== $any(n)?.stage ? 'review' : ''">
+              <div class="fxg">
+                <p class="txt sm mb-1 mt-4">{{m?.requirementPhaseName}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-12 col-md-12 col-6 mb-3 mb-xl-0 d-flex justify-content-xl-end">
+            <div class="btn-group me-1" dropdown container="body">
+              <button class="btn btn-icon" dropdownToggle><i class="fa fa-info-circle primary txt"></i></button>
+              <ul *dropdownMenu class="dropdown-menu" role="menu">
+                <ng-container *ngFor="let m of n?.requirementPhaseList; index as i">
+                  <li *ngIf="m?.candidateRate?.rate" role="menuitem"><a class="dropdown-item ne"
+                      href="javascript:void(0)">&bull;&nbsp;&nbsp;
+                      {{ m?.requirementPhaseName }} - Ratings - {{m?.candidateRate?.rate}}/10</a></li>
+                </ng-container>
+              </ul>
+            </div>
+
+            <button class="btn btn-icon me-1" (click)="viewSelection(n, false)">
+              <i class="fa fa-eye primary txt"></i></button>
+            <button class="btn btn-icon me-1" (click)="viewSelection(n, true)">
+              <i class="fa fa-pen primary txt"></i></button>
+
+            <div class="btn-group" dropdown placement="bottom right" container="body">
+              <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                <i class="fa fa-ellipsis-v"></i>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mt-1">
+                <li role="menuitem"
+                  *ngIf="n?.interviewAccepted == true &&  n?.currentStage === 1 || (n?.currentStage === $any(n)?.requirementPhaseList?.length - 1) &&
+                  $any(n)?.requirementPhaseList[$any(n)?.currentStage - 1]?.status !== 'Not Cleared' && permissions?.scheduling">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="clearedRound(n)">Cleared Round</a>
+                </li>
+                <li role="menuitem" *ngIf="n?.interviewAccepted == true && n?.currentStage !== $any(n)?.requirementPhaseList?.length - 1 &&
+                  n?.currentStage !== 1 && $any(n)?.requirementPhaseList[$any(n)?.currentStage - 1]?.status !== 'Not Cleared' &&
+                  n?.currentStage !== n?.requirementPhaseList?.length && permissions?.scheduling">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="dialog()">Cleared Round</a>
+                </li>
+                <li role="menuitem" *ngIf="
+                  n?.interviewAccepted == true && n?.currentStage !== n?.requirementPhaseList?.length &&
+                  $any(n)?.requirementPhaseList[$any(n)?.currentStage - 1]?.status !== 'Not Cleared' &&
+                  n?.currentStage !== n?.requirementPhaseList?.length && permissions?.scheduling">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="_clearedRound(n)">Reschedule</a>
+                </li>
+                <li role="menuitem" *ngIf="
+                  $any(n)?.requirementPhaseList[$any(n)?.currentStage - 1]?.status !== 'Not Cleared' &&
+                  n?.currentStage !== n?.requirementPhaseList?.length && permissions?.reject">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="reject(n)">Rejected</a>
+                </li>
+                <li role="menuitem" *ngIf="
+                  n?.currentStage !== n?.requirementPhaseList?.length &&
+                  $any(n)?.requirementPhaseList[$any(n)?.currentStage - 1]?.status === 'Not Cleared'">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="reinitiate(n)">Re-initiate hiring</a>
+                </li>
+                <li role="menuitem"
+                  *ngIf="n?.currentStage === n?.requirementPhaseList?.length && permissions?.msa && !n?.msaCreated">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="createMsa(n)">Create MSA</a>
+                </li>
+                <li role="menuitem">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="notifications(n)">View Notifications</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal modal-backdrop" tabindex="-1"
+        [ngStyle]="{ display: dialogConfig === 'rateAndFeedback' ? 'block' : 'none' }">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <h4 class="modal-title txt mb-0 fw-6 dark">Update rating and feedback for - savedrequirementPhaseName</h4>
+            </div>
+            <div class="modal-body" [formGroup]="form">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label for="email1">Rate out of 1-10</label>
+                  <select formControlName="ratings" class="form-control form-control-lg form-select">
+                    <option hidden selected value="null">Select Rating</option>
+                    <option *ngFor="let value of rating_Value" [ngValue]="value">
+                      {{value.rate}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label>Feedback</label>
+                  <textarea class="form-control" rows="4" placeholder="Please Enter Your Feedback Here"
+                    formControlName="feedback"></textarea>
+                </div>
+              </div>
+
+              <div class="text-center mt-4">
+                <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" type="button"
+                  (click)="onFinal(n)"> submit </button>
+                <button (click)="clearedRound(n)" class="btn btn-success">Skip</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fxg" [class.d-none]="(candidates$ | async)?.length === 0">
+      <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+        [pageSizeOptions]="pageOptions.sizeOptions" (page)="pageChange($event)" class="size-none">
+      </mat-paginator>
+    </div>
+
+    <div class="text-center p-4" *ngIf="(candidates$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any recommendations.</h6>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-backdrop rightx nxt-3" [class.d-block]="toggleSidebar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-block">
+          <h5 class="txt bold dark fs-16 mb-1">Selection Progress Details</h5>
+          <p class="txt mb-0 dark bold">{{jobId}}. <span>{{jobTitle}}</span></p>
+        </div>
+        <button type="button" class="btn-close close dark fs-16 txt" (click)="_close()"></button>
+      </div>
+      <div class="modal-body">
+        <app-progress-view [info]="editInfo" *ngIf="editInfo && !_edit"></app-progress-view>
+        <app-progress-edit [info]="editInfo" *ngIf="editInfo && _edit"></app-progress-edit>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center">
+      <button class="btn me-2 p-0" (click)="back()">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <h5 class="card-title">Notifications</h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngFor="let n of notifications$ | async; let i=index; odd as isOdd; even as isEven">
+      <div class="card" [ngClass]="{'even': isEven}">
+        <div class="card-body">
+          <div class="row" [ngClass]="!n.markAsRead ? 'markUnread' : 'markRead'">
+            <div class="col-8 col-md-6 col-lg-8">
+              <h5 class="txt primary-dark bold mb-0 fs-16">{{n?.title}}</h5>
+              <p class="txt mb-0">{{n?.content}}</p>
+            </div>
+            <div class="col-3 col-md-5 col-lg-3">
+              <p class="txt sm mb-0 text-right">
+                <span><i class="fal fa-clock txt primary"></i></span>
+                {{ n?.date | date : 'longDate' }} at {{ n?.date | date : 'shortTime' }}
+              </p>
+            </div>
+
+            <div class="col-1 col-md-1 col-lg-1 text-right">
+              <div *ngIf="n?.markAsRead" class="acg">
+                <i title="Mark as unread" (click)="onMarkRead($any(n))" class="far fa-circle fa-xs"></i>
+              </div>
+              <div *ngIf="!n?.markAsRead" class="acg">
+                <i title="Mark as read" (click)="onMarkRead($any(n))" class="fas fa-circle fa-xs"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="fxg" [class.d-none]="(notifications$ | async)?.length === 0">
+      <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+        [pageSizeOptions]="pageOptions.sizeOptions" (page)="pageChange($event)" class="size-none">
+      </mat-paginator>
+    </div>
+
+    <div class="text-center p-4" *ngIf="(notifications$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any notifications.</h6>
+    </div>
+  </div>
+</div>

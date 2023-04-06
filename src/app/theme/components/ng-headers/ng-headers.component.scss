@@ -1,0 +1,34 @@
+header.top {
+  background-color: var(--background);
+  padding: 1.5rem;
+  top: 0;
+  position: fixed;
+  z-index: 1001;
+  height: 70px;
+  width: 100%;
+  min-width: var(--resMin);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--header-top-shadow);
+  // border-bottom: 1px solid var(--bs-border-color-translucent);
+}
+
+.first-order {
+  display: flex;
+  align-items: center;
+  > a.logo {
+    min-width: 125px;
+    max-width: 125px;
+    justify-content: center;
+    display: flex;
+    > img {
+      height: auto;
+      width: 125px;
+      overflow-x: hidden;
+    }
+  }
+  > .hamberger-menu {
+    margin-left: 16px;
+  }
+}

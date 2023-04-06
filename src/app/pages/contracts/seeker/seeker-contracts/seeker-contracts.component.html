@@ -1,0 +1,254 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Contracts</h5>
+  </div>
+  <div class="card-body">
+    <div class="row mb-4">
+      <div class="col-12 col-md-4">
+        <input type="text" class="form-control mw-300" placeholder="Search in Contracts" [(ngModel)]="_search" (keyup)="searchFn($event)">
+      </div>
+      <div class="col-12 col-md-8">
+        <div class="align-items-center d-flex justify-content-md-end mt-3 mt-md-0">
+          <div class="btn-group" dropdown container="body" placement="bottom right" [insideClick]="true">
+            <button dropdownToggle type="button" class="btn btn-icon btn-grey txt primary-dark">
+              <i class="fa-filter fal" aria-hidden="true"></i>
+            </button>
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <ng-container [ngTemplateOutlet]="filterTemplate"></ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card"
+      *ngFor="let n of (contracts$ | async)">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+            <div class="avatar-flex">
+              <a class="avatar md">
+                <img [src]="n?.avatar">
+              </a>
+              <div class="fxg">
+                <p class="txt bold sm mb-1">Name</p>
+                <h5 class="txt dark mb-0">{{n?.name}}</h5>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt bold sm mb-1">Position</p>
+              <h5 class="txt dark  mb-0">{{n?.position}}</h5>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+            <div class="fxg">
+              <p class="txt bold sm mb-1">Partner</p>
+              <h5 class="txt dark mb-0">{{n?.partner}}</h5>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt bold sm mb-1">Contact Details</p>
+              <h5 class="mb-0">
+                <span>
+                  <a class="txt primary-dark"
+                    [href]="n?.ownerMailId ? 'mailto:' + n?.ownerMailId : 'javascript:void(0)'" title="{{ n?.ownerMailId }}">
+                    <i class="fa fa-envelope fs-20 primary-dark txt"></i>
+                  </a>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <a [href]="n?.ownerContactNumber ? 'tel:' + n?.ownerContactNumber : 'javascript:void(0)'" title="{{ n?.ownerContactNumber }}">
+                    <i class="fa fa-phone-alt fs-20 primary-dark txt"></i>
+                  </a>
+                </span>
+              </h5>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt bold sm mb-1">Status</p>
+              <h5 class="txt mb-0 badge fs-14 bold"
+                [ngClass]="['PO Released', 'SOW Released', 'MSA Released', 'On-Boarded'].includes(n?.status) ? 'success' : 'warning'">
+                {{n?.status}}</h5>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-6">
+            <div class="fxg">
+              <p class="txt bold sm mb-1" *ngIf="!n?.contractDurationStartDate && n?.onBoarding">Onboarding</p>
+              <p class="txt bold sm mb-1" *ngIf="!n?.onBoarding && !n?.expiresOn && !n?.contractDurationStartDate">
+                Processed on</p>
+              <p class="txt bold sm mb-1" *ngIf="n?.onBoarding && n?.contractDurationStartDate && !n?.expiresOn">
+                Contract Duration</p>
+              <p class="txt bold sm mb-1" *ngIf="n?.expiresOn">Expires on</p>
+
+              <h5 class="txt dark mb-0" *ngIf="!n?.contractDurationStartDate && n?.onBoarding">
+                {{ n?.onBoarding | date : 'shortDate' }}</h5>
+              <h5 class="txt dark mb-0" *ngIf="!n?.onBoarding && !n?.expiresOn && !n?.contractDurationStartDate">
+                {{ n?.processedOn | date : 'shortDate' }} </h5>
+              <h5 class="txt dark mb-0" *ngIf="n?.onBoarding && n?.contractDurationStartDate && !n?.expiresOn">
+                {{ n?.contractDurationStartDate | date : 'shortDate' }}-
+                {{ n?.contractDurationEndDate | date : 'shortDate' }}</h5>
+              <h5 class="txt dark mb-0" *ngIf="n?.expiresOn">
+                {{ n?.expiresOn | date : 'shortDate' }}</h5>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-4 col-6">
+            <div class="d-flex align-items-center">
+              <button class="btn btn-icon me-2" (click)="openView(n)">
+                <i class="fa fa-eye"></i>
+              </button>
+              <div class="btn-group" dropdown container="body" placement="bottom right" [insideClick]="true">
+                <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                  <i class="fa-ellipsis-v fa" aria-hidden="true"></i>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+
+                  <li role="menuitem" dropdown placement="right" container="body" *ngIf="
+                  n?.status !=='On-Boarded'
+                  && (n?.msaStatus === 'MSA In-Writing')
+                ">
+                    <a class="align-items-center d-flex justify-content-between dropdown-item dropdown-toggle"
+                      fragment="nested-dropdowns" dropdownToggle (click)="false">
+                      MSA Status
+                    </a>
+                    <ul *dropdownMenu class="dropdown-menu" role="menu">
+                      <li role="menuitem" *ngFor="let m of contractStatus">
+                        <a class="dropdown-item" *ngIf="
+                        (m?.status === 'In-Progress' && n?.msaStatus === 'MSA In-Writing')
+                      " (click)="updateMsa(n, m)">{{m?.status}}</a>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li role="menuitem"
+                  *ngIf="n?.msaStatus === 'MSA Released' && _permission?.sow && !n?.isSowCreated && n?.isMsaCreated"
+
+                    (click)="navigate('/process/sow', n)">
+                    <a class="dropdown-item">Create SOW</a>
+                  </li>
+
+                  <li role="menuitem"
+                  *ngIf="n?.msaStatus === 'MSA Released' && _permission?.po && !n?.isPoCreated && n?.isMsaCreated"
+                    (click)="navigate('/process/po', n)">
+                    <a class="dropdown-item">Create / Release PO</a>
+                  </li>
+
+                  <li role="menuitem" *ngIf="n?.status !== 'On-Boarded' && n?.msaStatus === 'MSA Released' &&
+                    n?.sowStatus === 'SOW Released' && n?.poStatus === 'PO Released'"
+                    (click)="navigate('/contracts/onboarding', n)">
+                    <a class="dropdown-item">Onboarding</a>
+                  </li>
+
+                  <li role="menuitem" *ngIf="n?.status === 'On-Boarded'"
+                    (click)="navigate('/contracts/onboarding', n)">
+                    <a class="dropdown-item">Update</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-paginator class="fxg" [class.d-none]="pageOptions?.length === 0" [length]="pageOptions.length"
+      [pageSize]="pageOptions.size" [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+    </mat-paginator>
+
+    <div class="text-center p-4" *ngIf="(contracts$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any contracts.</h6>
+    </div>
+  </div>
+</div>
+
+<app-seeker-phases *ngIf="_view" [id]="$any(ownerInfo)?.ownerId" (close)="closeView()"></app-seeker-phases>
+
+<ng-template #filterTemplate>
+  <div class="card mb-0 border-0 min-w-425">
+    <div class="card-header py-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title">Filter by</h5>
+        <button class="btn btn-with-icon text-danger right" (click)="filterReset()">
+          <i class="fa fa-undo"></i>
+          Reset
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-3 mh-275 min-h-275 overflow-auto">
+      <div class="row">
+        <div class="col-4 border-right">
+          <ul class="list-group list-group-flush fx-list">
+            <li class="list-group-item pl-0" (click)="filterSelection(n)" *ngFor="let n of filterOptions"
+              [class.fx-active]="n?.value === _filterSelection">{{n?.label}}</li>
+          </ul>
+        </div>
+        <div class="col-8">
+          <ng-container *ngIf="_filterSelection === 'status'">
+            <ul class="list-group list-group-flush fx-list">
+              <li class="list-group-item" *ngFor="let n of filterStatus">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="n?.checked"
+                    (change)="filterStatusChange($event, n)">
+                  <label class="form-check-label">
+                    {{n?.label}}
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-container *ngIf="_filterSelection === 'partner'">
+            <ul class="list-group list-group-flush fx-list">
+              <li class="list-group-item" *ngFor="let n of filterPartner">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="n?.checked"
+                    (change)="filterSeekerChange($event, n)">
+                  <label class="form-check-label">
+                    {{n?.label}}
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-container *ngIf="_filterSelection === 'position'">
+            <ul class="list-group list-group-flush fx-list">
+              <li class="list-group-item" *ngFor="let n of filterPosition">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="n?.checked"
+                    (change)="filterPositionChange($event, n)">
+                  <label class="form-check-label">
+                    {{n?.label}}
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-container *ngIf="_filterSelection === 'dateSigned'">
+            <div class="form-floating mb-3 fr-input-group">
+              <input type="text" class="form-control" [(ngModel)]="selectedDate" readonly bsDatepicker
+                #dp="bsDatepicker" [bsConfig]="bsConfig" placeholder="mm/dd/yyyy" />
+              <label>Expected Date Signed</label>
+              <button class="btn ico" (click)="dp?.toggle()">
+                <i class="fa fa-calendar primary-dark txt"> </i>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer py-2">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary btn-sm" (click)="applyFilter()">Apply filter(s)</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

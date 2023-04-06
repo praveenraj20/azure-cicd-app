@@ -1,0 +1,117 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5 class="card-title">Employees List</h5>
+      <div class="position-relative fr-input-group w-fc d-none d-lg-block">
+        <button class="btn ico ne">
+          <i class="fal fa-search"></i>
+        </button>
+        <input type="text" class="form-control" placeholder="Search for Employees" [(ngModel)]="_search" (keyup)="searchFn($event)">
+      </div>
+      <button class="btn btn-primary btn-with-icon" routerLink="/talents/add">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add Talent
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card"
+      *ngFor="let n of (owners$ | async); let i = index">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Employee ID</p>
+              <h5 class="txt dark bold mb-0">EMP-{{n?.employeeId}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Employee Name</p>
+              <h5 class="txt dark bold mb-0">{{n?.employeeName}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Location</p>
+              <h5 class="txt dark bold mb-0">{{!nullish.includes(n?.location) ? n?.location : '-'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Level & Experience</p>
+              <h5 class="txt dark bold mb-0">{{!nullish.includes(n?.levelExperience) ? n?.levelExperience : '-'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Designation</p>
+              <h5 class="txt dark bold mb-0">-</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Status</p>
+              <h5 class="txt bold mb-0" [ngClass]="n?.status ? 'text-success' : 'text-danger'">
+                {{n?.status ? 'Active' : 'Inactive'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Owner Status</p>
+              <h5 class="txt dark bold mb-0">{{n?.id}}</h5>
+              <p class="mb-0 fs-16 badge fx" [ngClass]="
+              n?.ownerStatus === 'In Hiring' ? 'bg-success' :
+              n?.ownerStatus === 'In Bench' ? 'bg-warning' :
+              n?.ownerStatus === 'In Contract' ? 'bg-success' : 'bg-danger'">
+                {{ n?.ownerStatus }}
+              </p>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Joined Date</p>
+              <h5 class="txt dark bold mb-0">{{n?.joinedDate ? (n?.joinedDate | date: 'mediumDate') : '-'}}</h5>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="fxg">
+              <p class="txt sm mb-1">Rate</p>
+              <div *ngIf="!n?.editable">
+                <h5 class="txt dark bold mb-0">{{n?.rate}}</h5>
+              </div>
+              <div *ngIf="n?.editable">
+                <input type="number" (keyup.enter)="updateRate(n, i)" [(ngModel)]="rateValue" class="form-control"/>
+                <span class="rate">Hit 'Enter' key to save the rate</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+            <div class="d-flex align-items-center">
+              <a href="javascript:void(0)" (click)="navigate('/hiring/history', {empId: n?.employeeId})"
+                class="txt primary bold underline me-2">View job history</a>
+
+              <div class="btn-group" dropdown container="body" placement="bottom right">
+                <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li role="menuitem" *ngIf=" n?.ownerStatus === 'In Bench'" (click)="changeStatus(n)"><a class="dropdown-item">Update status</a></li>
+                  <li role-="menuitem" *ngIf="!n?.editable" (click)="editRate(n, i)"><a class="dropdown-item">Edit Rate</a></li>
+                  <!-- <li role-="menuitem" *ngIf="n?.editable" (click)="updateRate(n, i)"><a class="dropdown-item">Update Rate</a></li> -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center p-4" *ngIf="(owners$ | async)?.length === 0">
+      <img src="assets/images/404.png" class="img-fluid size-mh-225 size-mw-400 mb-4">
+      <h6 class="txt bold dark mb-0">You don't have any employees.</h6>
+    </div>
+
+    <mat-paginator [length]="pageOptions.length" [pageSize]="pageOptions.size"
+      [pageSizeOptions]="pageOptions.sizeOptions" class="size-none">
+    </mat-paginator>
+  </div>
+</div>

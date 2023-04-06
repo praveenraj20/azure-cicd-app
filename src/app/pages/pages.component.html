@@ -1,0 +1,8 @@
+<section>
+  <ng-headers></ng-headers>
+  <ng-sidenav></ng-sidenav>
+</section>
+
+<main class="main-content" [ngClass]="menuCollapsed ? 'collapsed' : ''">
+  <router-outlet></router-outlet>
+</main>

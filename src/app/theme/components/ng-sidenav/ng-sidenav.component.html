@@ -1,0 +1,47 @@
+<aside class="nav-menu" [ngClass]="menuCollapsed ? 'collapsed' : ''">
+  <ng-container [ngTemplateOutlet]="menuOptions"></ng-container>
+</aside>
+
+<ng-template #menuOptions>
+  <!-- <ul class="menu-list">
+    <li class="menu" *ngFor="let n of menuItems">
+      <a class="link" [routerLink]="n?.route?.paths" matRipple [ngClass]="n?.selected ? 'active' : ''">
+        <mat-icon [ngClass]="n?.selected ? '' : 'material-icons-outlined'">{{n?.icon}}</mat-icon>
+        <span>{{n?.title}}</span>
+      </a>
+    </li>
+  </ul> -->
+  <ul class="menu-list">
+    <ng-container *ngIf="isSeeker && isSeekerAdmin">
+      <li class="menu" *ngFor="let n of skillseeker">
+        <ng-container [ngTemplateOutlet]="innerTemplate" [ngTemplateOutletContext]="{n: n}"></ng-container>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="isPartner">
+      <li class="menu" *ngFor="let n of partner">
+        <ng-container [ngTemplateOutlet]="innerTemplate" [ngTemplateOutletContext]="{n: n}"></ng-container>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="isOwner">
+      <li class="menu" *ngFor="let n of owner">
+        <ng-container [ngTemplateOutlet]="innerTemplate" [ngTemplateOutletContext]="{n: n}"></ng-container>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="isSsAdmin">
+      <li class="menu" *ngFor="let n of superadmin">
+        <ng-container [ngTemplateOutlet]="innerTemplate" [ngTemplateOutletContext]="{n: n}"></ng-container>
+      </li>
+    </ng-container>
+  </ul>
+</ng-template>
+
+<ng-template #innerTemplate let-n="n">
+  <a class="link" [routerLink]="n?.routeLink" matRipple routerLinkActive="active"
+    [queryParams]="n?.query ? n.query : {}">
+    <i aria-hidden="true" [class]="n?.icon"></i>
+    <span>{{n?.label}}</span>
+  </a>
+</ng-template>

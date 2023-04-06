@@ -1,0 +1,29 @@
+.flex-img {
+    img {
+        width: 300px;
+        height: 56px
+    }
+}
+
+.overall{
+  border-bottom: 1px solid #eaecef;
+}
+
+.dateform{
+  text-align: center;
+}
+
+.input-group-prepend,
+.input-group-append {
+  > .input-group-text {
+    font-size: 1.25rem;
+    padding: 0.85rem;
+    color: var(--primary-hex);
+    > .fa {
+      color: var(--primary-hex);
+    }
+    &.pointer {
+      cursor: pointer;
+    }
+  }
+}

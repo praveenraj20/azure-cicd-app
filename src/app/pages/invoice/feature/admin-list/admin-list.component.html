@@ -1,0 +1,310 @@
+<div class="card">
+  <div class="card-body bg-white">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-between align-items-center">
+      <h4 class="txt bold dark mb-0">Invoice Listing</h4>
+      <button class="btn btn-primary w-10 mb-2 py-2" routerLink="/invoice/create-invoice">Create Invoice</button>
+    </div>
+
+    <div class="mt-3">
+      <tabset #tabset>
+        <tab heading="Received from Skill Partner">
+          <div class="card-body">
+            <div class="row">
+              <div class="card" *ngFor="let a of invoiceDetails">
+                <div class="card-body">
+                  <div class="row g-2 align-items-center">
+                    <div class="col-xl-1 col-lg-1 col-md-4 col-12">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">Invoice ID</p>
+                        <h5 class="txt dark bold mb-0">{{ a?.invoiceId }}</h5>
+                      </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-12">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">From</p>
+                        <h5 class="txt dark bold mb-0">{{ a?.partnerName }}</h5>
+                      </div>
+                    </div>
+
+
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">Submitted Date</p>
+
+                        <h5 class="txt dark bold mb-0">
+                          {{ a?.date | date:'MM/dd/yyyy' }}</h5>
+
+                      </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">Due Date</p>
+
+                        <h5 class="txt dark bold mb-0">
+                          {{ a?.paymentDueDate | date : 'MM/dd/yyyy' }}</h5>
+
+                      </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <div class="fxg tooltips">
+                        <span class="view" [ngClass]="a?.status?.status == 'Submitted'
+                      ? 'badge success'
+                      : a?.status?.status == 'Approved'
+                      ? 'badge success'
+                      : a?.status?.status == 'Paid'
+                      ? 'badge warning'
+                      : a?.status?.status == 'Rejected'
+                      ? 'badge danger'
+                      : 'badge  danger'">
+                          {{ a?.status?.status }}
+                        </span>
+                        <div class="left" *ngIf="a?.comments !== 'NA'">
+                          <p>{{a?.comments}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <a href="javascript:void(0)" class="txt primary bold underline me-2"
+                        (click)="onPreview($any(a)?.invoiceId)">View invoice</a>
+                    </div>
+                    <div class="col-xl-1 col-lg-4 col-md-4 col-6">
+                      <div class="d-flex align-items-center">
+
+                        <div class="btn-group" dropdown container="body" placement="bottom right">
+                          <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                          </button>
+                          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li
+                            (click)="updateStatus($any(a)?.invoiceId, $any(item.id), $any(item.status), $any(a)?.comments)"
+                            *ngFor="let item of invoiceStatusList">
+                            <a *ngIf="(item.status === 'Approved' || item.status === 'Rejected') && a?.status?.status === 'Submitted'"
+                              class="dropdown-item">{{ item.status }}</a>
+                            <a *ngIf="(item.status === 'Paid' || item.status === 'Pending') && a?.status?.status === 'Approved'"
+                              class="dropdown-item">{{
+                              item.status
+                              }}</a>
+                            <a *ngIf="item.status === 'Paid' && a?.status?.status === 'Pending'"
+                              class="dropdown-item">{{ item.status }}</a>
+                            <a *ngIf="item.status === 'Rejected' && a?.status?.status === 'Rejected'"
+                              class="dropdown-item">Update Comments</a>
+                          </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-md-12 col-lg-12 col-sm-12 col">
+                <div class="table-responsive">
+                  <table class="table txt fs-16">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Invoice ID</th>
+                        <th>From</th>
+                        <th>Submitted Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let a of invoiceDetails">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input" value="" />
+                        </label>
+                        <td scope="row">{{ a?.invoiceId }}</td>
+                        <td>{{ a?.partnerName }}</td>
+                        <td>{{ a?.date | date : 'MM/dd/yyyy'}}</td>
+                        <td>{{ a?.paymentDueDate | date : 'MM/dd/yyyy' }}</td>
+                        <td>
+                          <div class="align-items-center d-flex h-100">
+                            <p class="mb-0 fs-13 badge fx cell" [ngClass]="
+                              a?.status?.status === 'Submitted' ? 'success'
+                              : a?.status?.status === 'Approved' ? 'success'
+                              : a?.status?.status === 'Paid' ? 'warning'
+                              : a?.status?.status === 'Rejected' ? 'danger'
+                              : 'danger'">
+                              {{a?.status?.status ? a?.status?.status : '-'}}
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <a (click)="onPreview(a?.invoiceId)">View Invoice</a>
+                        </td>
+                        <td>
+                          <div class="btn-group" dropdown container="body" placement="bottom right">
+                            <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            </button>
+                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                              <li
+                                (click)="updateStatus($any(a)?.invoiceId, $any(item.id), $any(item.status), $any(a)?.comments)"
+                                *ngFor="let item of invoiceStatusList">
+                                <a *ngIf="(item.status === 'Approved' || item.status === 'Rejected') && a?.status?.status === 'Submitted'"
+                                  class="dropdown-item">{{ item.status }}</a>
+                                <a *ngIf="(item.status === 'Paid' || item.status === 'Pending') && a?.status?.status === 'Approved'"
+                                  class="dropdown-item">{{
+                                  item.status
+                                  }}</a>
+                                <a *ngIf="item.status === 'Paid' && a?.status?.status === 'Pending'"
+                                  class="dropdown-item">{{ item.status }}</a>
+                                <a *ngIf="item.status === 'Rejected' && a?.status?.status === 'Rejected'"
+                                  class="dropdown-item">Update Comments</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </tab>
+
+        <tab heading="Sent to Skill Seeker">
+          <div class="card-body">
+            <div class="row">
+              <div class="card" *ngFor="let a of _invoiceDetails">
+                <div class="card-body">
+                  <div class="row g-2 align-items-center">
+                    <div class="col-xl-2 col-lg-1 col-md-4 col-12">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">Invoice ID</p>
+                        <h5 class="txt dark bold mb-0">{{ a?.invoiceId }}</h5>
+                      </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">To</p>
+                        <h5 class="txt dark bold mb-0">{{ a?.clientName }}</h5>
+                      </div>
+                    </div>
+
+
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <div class="fxg">
+                        <p class="txt sm mb-1">Submitted Date</p>
+
+                        <h5 class="txt dark bold mb-0">
+                          {{ a?.date | date:'MM/dd/yyyy' }}</h5>
+
+                      </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <div class="fxg tooltips">
+                        <span class="view" [ngClass]="a?.status?.status == 'Submitted'
+                      ? 'badge success'
+                      : a?.status?.status == 'Approved'
+                      ? 'badge success'
+                      : a?.status?.status == 'Paid'
+                      ? 'badge warning'
+                      : a?.status?.status == 'Rejected'
+                      ? 'badge danger'
+                      : 'badge  danger'">
+                          {{ a?.status?.status }}
+                        </span>
+                        <div class="left" *ngIf="a?.comments !== 'NA'">
+                          <p>{{a?.comments}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-6">
+                      <a href="javascript:void(0)" class="txt primary bold underline me-2"
+                      (click)="onPreview1(a?.invoiceId)">View Invoice</a>
+                    </div>
+                    <div class="col-xl-1 col-lg-4 col-md-4 col-6">
+                      <div class="d-flex align-items-center">
+
+                        <div class="btn-group" dropdown container="body" placement="bottom right">
+                          <button dropdownToggle type="button" class="btn btn-icon btn-grey">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                          </button>
+                          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li (click)="updateStatus2($any(a)?.invoiceId, $any(item.id),$any(item.status))"
+                            *ngFor="let item of invoiceStatusList">
+                            <a *ngIf="item.status === 'Submitted' && a?.status?.status === 'Rejected'"
+                              class="dropdown-item">Update</a>
+                          </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table txt fs-16">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Invoice ID</th>
+                        <th>To</th>
+                        <th>Submitted Date</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let a of _invoiceDetails">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input" value="" />
+                        </label>
+                        <td scope="row">{{ a?.invoiceId }}</td>
+                        <td>{{ a?.clientName }}</td>
+                        <td>{{ a?.date | date : 'MM/dd/yyyy' }}</td>
+                        <td>
+                          <div class="align-items-center d-flex h-100">
+                            <p class="mb-0 fs-13 badge fx cell" [ngClass]="
+                              a?.status?.status === 'Submitted' ? 'success'
+                              : a?.status?.status === 'Approved' ? 'success'
+                              : a?.status?.status === 'Paid' ? 'warning'
+                              : a?.status?.status === 'Rejected' ? 'danger'
+                              : 'danger'">
+                              {{a?.status?.status ? a?.status?.status : '-'}}
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <a href="javascript:void(0)" class="txt primary bold underline me-2"
+                            (click)="onPreview1(a?.invoiceId)">View Invoice</a>
+                        </td>
+                        <td>
+                          <div class="btn-group" dropdown container="body" placement="bottom right">
+                            <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            </button>
+                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                              <li (click)="updateStatus2($any(a)?.invoiceId, $any(item.id),$any(item.status))"
+                                *ngFor="let item of invoiceStatusList">
+                                <a *ngIf="item.status === 'Submitted' && a?.status?.status === 'Rejected'"
+                                  class="dropdown-item">Update</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

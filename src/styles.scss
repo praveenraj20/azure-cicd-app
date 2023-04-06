@@ -1,0 +1,415 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&family=Roboto:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp");
+@import url("https://pro.fontawesome.com/releases/v5.10.0/css/all.css");
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, "Helvetica Neue", sans-serif;
+  background-color: var(--background-bg);
+}
+
+@media print {
+  body {
+    display: none;
+  }
+}
+
+.badge {
+  &.cell {
+    width: 85px;
+    max-width: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &.success {
+    background-color: var(--bs-teal);
+    color: var(--white-text);
+  }
+  &.info {
+    background-color: var(--bs-cyan);
+    color: var(--white-text);
+  }
+  &.danger {
+    background-color: var(--bs-red);
+    color: var(--white-text);
+  }
+  &.warning {
+    background-color: var(--bs-yellow);
+    color: var(--default-text);
+  }
+  &.blue {
+    background-color: var(--bs-blue);
+    color: var(--white-text);
+  }
+  &.purple {
+    background-color: var(--bs-purple);
+    color: var(--white-text);
+  }
+  &.primary {
+    background-color: var(--primary-hex);
+    color: var(--primary-contrast-hex);
+  }
+}
+
+.txt {
+  color: var(--default-text);
+  font-weight: 400;
+  &.bold {
+    font-weight: 600;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+  &.thin {
+    font-weight: 200;
+  }
+  &.dark {
+    color: var(--dark-text);
+  }
+  &.primary {
+    color: var(--primary-hex);
+  }
+  &.primary-dark {
+    color: var(--primary-hex-dark);
+  }
+  &.sm {
+    font-size: 12px;
+  }
+  &.underline {
+    text-decoration: underline;
+  }
+}
+
+@for $i from 10 through 30 {
+  .txt.fs-#{$i} {
+    font-size: #{$i}px;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.fx-border {
+  border-top: 1px solid var(--bs-border-color-translucent);
+}
+
+/** Datepicker changes  */
+bs-datepicker-inline {
+  &.flat {
+    .bs-datepicker {
+      box-shadow: none;
+    }
+  }
+
+  &.pxy-0 {
+    .bs-datepicker-container {
+      padding: 0;
+    }
+  }
+}
+
+.theme-dark-blue .bs-datepicker-head,
+.theme-dark-blue .bs-datepicker-body table td span.selected,
+.theme-dark-blue .bs-datepicker-body table td.selected span,
+.theme-dark-blue .bs-datepicker-body table td span[class*="select-"]:after,
+.theme-dark-blue .bs-datepicker-body table td[class*="select-"] span:after {
+  background-color: var(--primary-hex);
+}
+
+/** Datepicker changes  */
+
+.avatar {
+  background-color: transparent;
+  color: #fff;
+  display: inline-block;
+  font-weight: 500;
+  height: 34px;
+  line-height: 38px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: 34px;
+  position: relative;
+  white-space: nowrap;
+  margin: 0 10px 0 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.175);
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  &.xs {
+    width: 24px;
+    height: 24px;
+  }
+  &.md {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  &.lg {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+  &.xl {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+.avatar-flex {
+  align-items: center;
+  display: inline-flex;
+  font-size: inherit;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+$sizes: 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375,
+  400, 425, 450, 475, 500;
+
+@each $i in $sizes {
+  .img-fluid.size-mh-#{$i} {
+    max-height: #{$i}px;
+  }
+  .img-fluid.size-mw-#{$i} {
+    max-width: #{$i}px;
+  }
+  .mh-#{$i} {
+    max-height: #{$i}px;
+  }
+  .mw-#{$i} {
+    max-width: #{$i}px;
+  }
+  .min-h-#{$i} {
+    min-height: #{$i}px;
+  }
+  .min-w-#{$i} {
+    min-width: #{$i}px;
+  }
+}
+
+mat-paginator {
+  &.size-none {
+    .mat-paginator-container {
+      > .mat-paginator-page-size {
+        display: none;
+      }
+    }
+  }
+}
+
+mat-form-field.fx-flat {
+  .mat-form-field-wrapper {
+    padding-bottom: 1rem;
+  }
+  .mat-form-field-subscript-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+    mat-error {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.fx-progress-v {
+  position: relative;
+  padding: 0px 0px 0px 40px;
+  margin: 20px 0px;
+  &::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    background: rgb(255, 255, 255);
+    border: 2px solid rgb(203, 203, 219);
+    left: 0px;
+    top: 0px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    height: 105%; //Please do not change 105% to 100%
+    width: 1px;
+    border-left: 2px dashed rgb(203, 203, 219);
+    left: 8px;
+    top: 18px;
+  }
+  &.success {
+    &::before {
+      background: var(--primary-hex-dark);
+      border: 2px solid var(--primary-hex-dark);
+    }
+    &::after {
+      border-left: 2px solid var(--primary-hex-dark);
+    }
+  }
+  &.review {
+    &::before {
+      background: var(--accent-hex);
+      border: 2px solid var(--accent-hex);
+    }
+    &::after {
+      background: rgb(255, 255, 255);
+      border-left: 2px dashed rgb(203, 203, 219);
+    }
+  }
+  &:last-child {
+    &::after {
+      content: none;
+    }
+  }
+}
+
+.fx-progress-group {
+  display: table;
+  width: 100%;
+  margin: 0;
+  padding: 15px 15px 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .fx-progress-h {
+    position: relative;
+    padding: 0px 0px 0px 40px;
+    margin: 20px 0px;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      background: rgb(255, 255, 255);
+      border: 2px solid rgb(203, 203, 219);
+      left: 0px;
+      top: 0px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      height: 105%; //Please do not change 105% to 100%
+      width: 1px;
+      border-left: 2px dashed rgb(203, 203, 219);
+      left: 8px;
+      top: 18px;
+    }
+    &.success {
+      &::before {
+        background: var(--primary-hex-dark);
+        border: 2px solid var(--primary-hex-dark);
+      }
+      &::after {
+        border-left: 2px solid var(--primary-hex-dark);
+      }
+    }
+    &.review {
+      &::before {
+        background: var(--accent-hex);
+        border: 2px solid var(--accent-hex);
+      }
+      &::after {
+        background: rgb(255, 255, 255);
+        border-left: 2px dashed rgb(203, 203, 219);
+      }
+    }
+    &:last-child {
+      &::after {
+        content: none;
+      }
+    }
+  }
+}
+@media (min-width: 768px) {
+  .fx-progress-h {
+    display: table-cell;
+    width: auto;
+    float: left;
+    font-size: 14px;
+    position: relative;
+    text-align: center;
+    padding: 0px 20px;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      background: rgb(255, 255, 255);
+      border: 2px solid rgb(203, 203, 219);
+      left: 50%;
+      top: 0px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      height: 3px;
+      width: 100%;
+      border-top: 2px dashed #cbcbdb;
+      margin: 0px 20px;
+      left: 42%;
+      top: 7px;
+    }
+    &.success {
+      &::before {
+        background: var(--primary-hex-dark);
+        border: 2px solid var(--primary-hex-dark);
+      }
+      &::after {
+        border-top: 2px solid var(--primary-hex-dark);
+      }
+    }
+    &.review {
+      &::before {
+        background: var(--accent-hex);
+        border: 2px solid var(--accent-hex);
+      }
+      &::after {
+        border-left: 2px solid var(--primary-hex-dark);
+      }
+    }
+    &:last-child {
+      &::after {
+        content: none;
+      }
+    }
+  }
+}
+
+.fx-progress-c,
+.fx-progress-c > svg {
+  height: 50px !important;
+  width: 50px !important;
+}
+
+.editor {
+  > .ql-toolbar.ql-snow {
+    border-radius: 4px 4px 0 0;
+  }
+  > .ql-container.ql-snow {
+    border-radius: 0 0 4px 4px;
+  }
+}
+
+.swal2-title {
+  font-size: 1.25rem !important;
+  color: var(--dark-text) !important;
+}

@@ -1,0 +1,282 @@
+<main>
+  <ng-container [ngTemplateOutlet]="first" *ngIf="step === 1"></ng-container>
+  <ng-container [ngTemplateOutlet]="second" *ngIf="step === 2"></ng-container>
+</main>
+
+<ng-template #first>
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="card-title mb-0"><i aria-hidden="true" class="fa-arrow-left fas me-2" routerLink="/dashboard"></i>
+          View Project Details</h5>
+        <button class="btn btn-primary btn-with-icon right" (click)="next(2)"><i class="fa fa-plus"
+            aria-hidden="true"></i>
+          Create Project</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <div *ngFor="let list of projectDetails">
+        <div class="card mt-3 project-card">
+          <div class="row-md-12 col-sm-12">
+            <div class="card-body justify-content-between align-items-center">
+              <div class="row">
+                <div class="col-md-1 col-sm-3 ">
+                  <th>
+                    <h6>Project Id</h6>
+                    <p>{{ list.skillSeekerProjectEntity?.id }}</p>
+                  </th>
+                </div>
+                <div class="col-md-10 col-sm-6">
+                  <th>
+                    <h6 class="text-primary">{{ list.skillSeekerProjectEntity?.title }}</h6>
+                    <p>{{ list.skillSeekerProjectEntity?.summary }}</p>
+                  </th>
+                </div>
+                <div class="col-md-1 col-sm-3 d-flex justify-content-end">
+                  <th>
+                    <div class="d-flex align-items-center mt-2">
+                      <i class="fa fa-pencil mx-2 txt primary-dark" aria-hidden="true"
+                        (click)="dialogConfig = 'projectCard'; updateProject(list.skillSeekerProjectEntity)"></i>
+                      <i class="fa fa-plus-circle txt primary-dark"
+                        (click)="redirectProject(list.skillSeekerProjectEntity?.id)" aria-hidden="true"></i>
+                    </div>
+                  </th>
+                </div>
+              </div>
+              <hr>
+              <h4 class="text-primary" *ngIf="!list?.skillSeekerTasks?.length">Please Add Tasks into
+                the Project</h4>
+              <div *ngIf="list?.skillSeekerTasks?.length"
+                [ngClass]="list?.skillSeekerTasks?.length > 3 ? 'taskcontainer' : ''">
+                <div *ngFor="let item of list.skillSeekerTasks">
+                  <div class="row">
+                    <div class="col-md-1">
+                      <td>
+                        <span>Task Id</span>
+                        <p class="text-success">{{ item.taskId }}</p>
+                      </td>
+                    </div>
+                    <div class="col-md-2">
+                      <td>
+                        <span>Task Title</span>
+                        <p class="text-primary">{{ item.taskTitle }}</p>
+                      </td>
+                    </div>
+                    <div class="col-md-8">
+                      <td>
+                        <p>Task Description</p>
+                        <p>{{ item.taskDescription }}</p>
+                      </td>
+                    </div>
+                    <div class="col-md-1 d-flex justify-content-end">
+                      <td>
+                        <div class="d-flex align-items-center mt-2">
+                          <i class="fa fa-pencil mx-2 txt primary-dark" aria-hidden="true"
+                            (click)="open(item, list)"></i>
+                          <i class='fa fa-trash text-danger' (click)="deleteTask(item.taskId)"></i>
+                        </div>
+                      </td>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #second>
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="card-title mb-0"><i aria-hidden="true" class="fa-arrow-left fas" (click)="next(1)"></i>
+          Create Project</h5>
+        <button class="btn btn-outline-danger btn-with-icon right" (click)="next(1)">Cancel</button>
+      </div>
+    </div>
+    <div class="card-body text-center">
+      <h2 class="card-text pt-5 txt primary-dark">Create Projects</h2>
+      <div [formGroup]="form" class="pt-4">
+        <div class="d-flex flex-column justify-content-center">
+          <div class="offset-md-4 col-md-4">
+            <div class="form-floating mb-3">
+              <input class="form-control" formControlName="projectTitle"
+                [ngClass]="{ 'is-invalid': f?.projectTitle?.touched && f?.projectTitle?.errors }"
+                placeholder="Project Title">
+              <div class="d-flex flex-column justify-content-left"
+                *ngIf="f?.projectTitle?.touched && f?.projectTitle?.errors" class="error-msg">
+                <div *ngIf="f.projectTitle?.errors?.required" class="text-danger d-flex">Project Title is
+                  required
+                </div>
+              </div>
+              <label>Project Title*</label>
+            </div>
+
+            <div class="mb-3">
+              <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="5"
+                formControlName="description"
+                [ngClass]="{ 'is-invalid': f?.description?.touched && f?.description?.errors }"
+                placeholder="Project Description*">
+                            </textarea>
+              <div class="d-flex flex-column justify-content-left"
+                *ngIf="f?.description?.touched && f?.description?.errors" class="error-msg">
+                <div *ngIf="f.description?.errors?.required" class="text-danger d-flex">Project Description is
+                  required
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <select class="form-control form-select" formControlName="department"
+                [ngClass]="{ 'is-invalid': f?.department?.touched && f?.department?.errors }">
+                <option hidden selected value="">Select Department</option>
+                <option *ngFor="let department of domainList" [ngValue]="department.domainId">
+                  {{ department.domainValues }}
+                </option>
+              </select>
+              <label>Select Department*</label>
+              <div *ngIf="f?.department?.touched && f?.department?.errors" class="error-msg">
+                <div *ngIf="f.department?.errors?.required" class="text-danger d-flex">Department is required
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3 fr-input-group">
+              <input type="text" class="form-control" bsDatepicker #sd="bsDatepicker" [bsConfig]="bsConfig"
+                placeholder="mm/dd/yyyy" formControlName="startDate"
+                [ngClass]="{ 'is-invalid me-bg': f?.startDate?.touched && f?.startDate?.errors }" />
+              <label>Start Date*</label>
+              <button class="btn ico" (click)="sd?.toggle()">
+                <i class="fa fa-calendar primary-dark txt"></i>
+              </button>
+              <div *ngIf="f?.startDate?.touched && f?.startDate?.errors" class="invalid-feedback d-flex">
+                <div *ngIf="f.startDate?.errors?.required">Start Date is required</div>
+              </div>
+            </div>
+            <div class="form-floating mb-3 fr-input-group">
+              <input type="text" class="form-control" bsDatepicker #ed="bsDatepicker" [bsConfig]="bsConfig"
+                placeholder="mm/dd/yyyy" formControlName="endDate"
+                [ngClass]="{ 'is-invalid me-bg': f?.endDate?.touched && f?.endDate?.errors }" />
+              <label>End Date*</label>
+              <button class="btn ico" (click)="ed?.toggle()">
+                <i class="fa fa-calendar primary-dark txt"></i>
+              </button>
+              <div *ngIf="f?.endDate?.touched && f?.endDate?.errors" class="invalid-feedback d-flex">
+                <div *ngIf="f.endDate?.errors?.required">End Date is required</div>
+                <div *ngIf="f.endDate?.errors?.minDate">End date should be greater than start date</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 d-flex justify-content-center">
+            <button type="submit" [disabled]="!form?.valid" class="btn btn-primary w-30 mb-2 py-2"
+              (click)="onBoardingSubmit()">Proceed-></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="modal" tabindex="-1" [ngStyle]="{ display: dialogConfig === 'task' ? 'block' : 'none' }">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h4 class="modal-title txt mb-0 fw-6 dark">Update Task</h4>
+        <button type="button" class="close" (click)="dialogConfig = ''">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mt-4">
+          <div [formGroup]="updatetaskForm">
+            <div class="row client-form d-flex flex-column justify-content-center">
+              <div class="row client-form d-flex flex-column justify-content-center">
+                <div class="offset-md-3 col-md-6">
+                  <div class="form-floating mt-3">
+                    <input type="text" class="form-control" placeholder="Task Title" name="TaskTitle"
+                      formControlName="taskTitle" />
+                    <label for="title">Task Title*</label>
+                  </div>
+                  <div class="form-floating area mt-3">
+                    <textarea type="text" class="form-control" placeholder="Project Description" rows="5"
+                      formControlName="taskDescription"></textarea>
+                    <label>Task Description*</label>
+                  </div>
+                </div>
+                <div class="card-footer create-new-footer mt-5 d-flex justify-content-center">
+                  <button [disabled]="!this.updatetaskForm.valid" class="btn btn-primary"
+                    (click)="updateTask()">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{ display: dialogConfig === 'projectCard' ? 'block' : 'none' }">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h4 class="modal-title text-bold">Update Project</h4>
+        <button class="close" type="button" (click)="dialogConfig = ''">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div [formGroup]="projectForm">
+          <div class="row client-form d-flex flex-column justify-content-center">
+            <div class="offset-md-3 col-md-6">
+              <div class="form-floating  mb-3">
+                <input type="text" class="form-control" placeholder="Candidate Name" formControlName="projectTitle" />
+                <label for="email">Project Title *</label>
+              </div>
+              <div class="form-floating area mb-3">
+                <textarea type="text" class="form-control" placeholder="Project Description"
+                  formControlName="projectDescription">
+                  </textarea>
+                <label>Project Description *</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select class="form-select" formControlName="projectDepartment">
+                  <option hidden selected value="">Please Select</option>
+                  <option *ngFor="let item of departmentData" [value]="item.domainId">
+                    {{ item?.domainValues }}
+                  </option>
+                </select>
+                <label>Project Department*</label>
+              </div>
+              <div class="form-floating mb-3 fr-input-group">
+                <input type="text" class="form-control" bsDatepicker #sd1="bsDatepicker" [bsConfig]="bsConfig"
+                  [minDate]="today" placement="top" [daysDisabled]="[6, 0]" (onHidden)="handler()"
+                  placeholder="mm/dd/yyyy" formControlName="startDate" />
+                <label for="startDate">Start Date *</label>
+                <button class="btn ico" (click)="sd1?.toggle()">
+                  <i class="fa fa-calendar primary-dark txt"></i>
+                </button>
+              </div>
+              <div class="form-floating mb-3 fr-input-group">
+                <input type="text" class="form-control" bsDatepicker #ed1="bsDatepicker" [bsConfig]="bsConfig"
+                  [minDate]="disabledDates" placement="top" [daysDisabled]="[6, 0]" placeholder="mm/dd/yyyy"
+                  formControlName="endDate" />
+                <label for="endDate">End Date *</label>
+                <button class="btn ico" (click)="ed1?.toggle()">
+                  <i class="fa fa-calendar primary-dark txt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-footer mt-5 d-flex justify-content-center">
+              <button class="btn btn-primary" type="submit" [disabled]="!projectForm?.valid"
+                (click)="onProjectSubmit()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

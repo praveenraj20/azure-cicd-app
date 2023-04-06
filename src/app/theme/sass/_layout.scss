@@ -1,0 +1,55 @@
+$top: 70px;
+$resS: 660px;
+$defaultM: 95px;
+@include scrollBar(8px, var(--scroll-thumb), var(--scroll-track));
+
+@mixin collapsed($left: 0) {
+  &.collapsed {
+    margin-left: $left;
+  }
+}
+
+main.main-content {
+  min-height: calc(100vh - 70px);
+  top: 70px;
+  margin-left: 250px;
+  position: relative;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  padding: 1.5rem;
+  background-color: var(--background-bg);
+  @include collapsed($defaultM);
+}
+
+aside.nav-menu {
+  position: fixed;
+  z-index: 1000;
+  height: 100%;
+  line-height: inherit;
+  background: var(--background);
+  border-right: 1px solid var(--bs-border-color-translucent);
+  width: 250px;
+  text-align: left;
+  padding: 1.5rem 1.5rem;
+  transition: 0.3s ease;
+  &.collapsed {
+    width: $defaultM;
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: $resS) {
+  main.main-content {
+    margin-left: 0;
+    @include collapsed(0px);
+  }
+  aside.nav-menu {
+    box-shadow: var(--aside-nav-shadow);
+    &.collapsed {
+      width: 0;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+}
